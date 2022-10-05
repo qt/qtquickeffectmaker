@@ -663,6 +663,7 @@ void EffectManager::updateCustomUniforms()
             continue;
         if (!uniform.exportProperty)
             continue;
+        const bool isDefine = uniform.type == UniformModel::Uniform::Type::Define;
         QString type = m_uniformModel->typeToProperty(uniform.type);
         QString value = m_uniformModel->valueAsString(uniform);
         QString bindedValue = m_uniformModel->valueAsBinding(uniform);
@@ -673,8 +674,8 @@ void EffectManager::updateCustomUniforms()
         }
         // Note: Define type properties appear also as QML properties (in preview) in case QML side
         // needs to use them. This is used at least by BlurHelper max_blur_level.
-        QString propertyName = uniform.type == UniformModel::Uniform::Type::Define ? uniform.name.toLower() : uniform.name;
-        if (!uniform.useCustomValue && !uniform.description.isEmpty()) {
+        QString propertyName = isDefine ? uniform.name.toLower() : uniform.name;
+        if (!uniform.useCustomValue && !isDefine && !uniform.description.isEmpty()) {
             // When exporting, add API documentation for properties
             QStringList descriptionLines = uniform.description.split('\n');
             for (const auto &line: descriptionLines)
@@ -686,7 +687,7 @@ void EffectManager::updateCustomUniforms()
         QString readOnly = uniform.useCustomValue ? QString() : QStringLiteral("readonly ");
         previewEffectPropertiesString += "    " + readOnly + "property " + type + " " + propertyName + bindedValueString + '\n';
         // Define type properties are not added into exports
-        if (uniform.type != UniformModel::Uniform::Type::Define) {
+        if (!isDefine) {
             if (uniform.useCustomValue) {
                 // Custom values are only inside the effect, with description comments
                 if (!uniform.description.isEmpty()) {

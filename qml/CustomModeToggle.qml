@@ -14,8 +14,10 @@ Item {
     property string textOff: ""
     property string description
 
+    readonly property real imageScale: (288 / 128)
+
     height: 64
-    width: height * (288/128)
+    width: height * imageScale
 
     Behavior on toggledAnimated {
         id: toggleBehavior

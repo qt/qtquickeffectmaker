@@ -607,7 +607,7 @@ CustomPopup {
                     anchors.left: parent.left
                     anchors.top: parent.top
                     icon: "images/icon_remove_shadow.png"
-                    visible: previewImage.source != ""
+                    visible: previewImage.source !== ""
                     onClicked: {
                         rootItem.defaultValue = "";
                         previewImage.source = "";
@@ -628,7 +628,7 @@ CustomPopup {
                 checked: rootItem.initialEnableMipmap
                 onToggled: {
                     rootItem.enableMipmap = checked;
-                    if (initialName != "") {
+                    if (initialName !== "") {
                         var mipmapPropertyName = effectManager.mipmapPropertyName(initialName);
                         g_propertyData[mipmapPropertyName] = checked;
                     }
@@ -824,7 +824,7 @@ CustomPopup {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             text: isNewProperty ? "Add" : "OK"
-            enabled: uniformNameTextInput.text != ""
+            enabled: uniformNameTextInput.text !== ""
             onClicked: {
                 if (isNewProperty) {
                     rootItem.insertUniform();
@@ -849,7 +849,7 @@ CustomPopup {
             anchors.bottom: parent.bottom
             text: "Cancel"
             onClicked: {
-                if ((typeComboBox.currentIndex === 7) && initialName != "") {
+                if ((typeComboBox.currentIndex === 7) && initialName !== "") {
                     // For image properties return the initial mipmap value
                     var mipmapPropertyName = effectManager.mipmapPropertyName(initialName);
                     g_propertyData[mipmapPropertyName] = initialEnableMipmap;

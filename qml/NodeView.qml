@@ -54,14 +54,14 @@ NodeViewItem {
 
     RenameNodeDialog {
         id: renameNodeDialog
-        x: mainWindow.width / 2 - width / 2
-        y: mainWindow.height / 2 - height / 2
+        x: mainWindow.width * 0.5 - width * 0.5
+        y: mainWindow.height * 0.5 - height * 0.5
     }
 
     AddNodeDialog {
         id: addNodeDialog
-        x: mainWindow.width / 2 - width / 2
-        y: mainWindow.height / 2 - height / 2
+        x: mainWindow.width * 0.5 - width * 0.5
+        y: mainWindow.height * 0.5 - height * 0.5
     }
 
     Image {
@@ -81,7 +81,7 @@ NodeViewItem {
             color: mainView.backgroundColor1
             opacity: model.disabled ? 0.4 : 1.0
             border.width: 2
-            radius: model.type > 1 ? 6 : height / 2
+            radius: model.type > 1 ? 6 : height * 0.5
             Text {
                 anchors.centerIn: parent
                 horizontalAlignment: Text.AlignHCenter
@@ -119,9 +119,9 @@ NodeViewItem {
             Rectangle {
                 width: 10
                 height: 10
-                x: parent.width / 2 - width / 2
-                y: -height / 2
-                radius: width / 2
+                x: parent.width * 0.5 - width * 0.5
+                y: -height * 0.5
+                radius: width * 0.5
                 visible: model.type !== 0
                 border.width: 2
                 border.color: connectorColor
@@ -130,9 +130,9 @@ NodeViewItem {
             Rectangle {
                 width: 10
                 height: 10
-                x: parent.width / 2 - width / 2
-                y: parent.height - height / 2
-                radius: width / 2
+                x: parent.width * 0.5 - width * 0.5
+                y: parent.height - height * 0.5
+                radius: width * 0.5
                 visible: model.type !== 1
                 border.width: 2
                 border.color: connectorColor
@@ -166,11 +166,11 @@ NodeViewItem {
         delegate: Rectangle {
             property real arrowWidth: Math.sqrt(Math.pow(model.endX - model.startX, 2) + Math.pow(model.endY - model.startY, 2))
 
-            x: model.startX + (model.endX - model.startX) / 2 - width / 2
-            y: model.startY + (model.endY - model.startY) / 2 - height / 2
+            x: model.startX + (model.endX - model.startX) * 0.5 - width * 0.5
+            y: model.startY + (model.endY - model.startY) * 0.5 - height * 0.5
             width: 20
             height: 20
-            radius: width / 2
+            radius: width * 0.5
             border.width: 1
             color: mainView.backgroundColor1
             border.color: highlightColor
@@ -199,7 +199,7 @@ NodeViewItem {
                 anchors.verticalCenter: parent.verticalCenter
                 font.pixelSize: 16
                 color: mainView.foregroundColor1
-                visible: nodeViewItem.nodeGraphComplete && nodeViewItem.arrowsModel.rowCount == 1
+                visible: nodeViewItem.nodeGraphComplete && nodeViewItem.arrowsModel.rowCount === 1
                 text: "Add Node"
             }
         }
@@ -213,7 +213,7 @@ NodeViewItem {
         anchors.topMargin: 20
         width: 30
         height: 30
-        radius: width / 2
+        radius: width * 0.5
         border.width: 2
         color: mainView.backgroundColor1
         border.color: borderColor

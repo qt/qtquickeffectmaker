@@ -791,7 +791,10 @@ QString EffectManager::getQmlEffectString()
         s += "    BlurHelper {\n";
         s += "        id: blurHelper\n";
         s += "        anchors.fill: parent\n";
-        s += "        property int blurMax: rootItem.max_blur_level\n";
+        int blurMax = 32;
+        if (g_propertyData.contains("MAX_BLUR_LEVEL"))
+            blurMax = g_propertyData["MAX_BLUR_LEVEL"].toInt();
+        s += QString("        property int blurMax: %1\n").arg(blurMax);
         s += "        property real blurMultiplier: rootItem.blurMultiplier\n";
         s += "    }\n";
     }

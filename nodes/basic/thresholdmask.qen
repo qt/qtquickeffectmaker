@@ -6,10 +6,10 @@
             "{",
             "    vec4 maskTexture = texture(thresholdMaskSource, texCoord);",
             "    float alphaMask = maskTexture.a;",
-            "    const float mSLow = 1.0 + maskSpreadLow;",
-            "    const float mSUp = 1.0 + maskSpreadUp;",
-            "    float m1 = smoothstep(maskThresholdLow * mSLow - (mSLow - 0.999), maskThresholdLow * mSLow, alphaMask);",
-            "    float m2 = smoothstep((1.0 - maskThresholdUp) * mSUp - (mSUp - 0.999), (1.0 - maskThresholdUp) * mSUp, (1.0 - alphaMask));",
+            "    const float mSLow = 1.0 + thresholdMaskSpreadLow;",
+            "    const float mSUp = 1.0 + thresholdMaskSpreadUp;",
+            "    float m1 = smoothstep(thresholdMaskThresholdLow * mSLow - (mSLow - 0.999), thresholdMaskThresholdLow * mSLow, alphaMask);",
+            "    float m2 = smoothstep((1.0 - thresholdMaskThresholdUp) * mSUp - (mSUp - 0.999), (1.0 - thresholdMaskThresholdUp) * mSUp, (1.0 - alphaMask));",
             "    float mm = m1 * m2;",
             "    fragColor *= (1.0 - float(thresholdMaskInverted)) * mm + float(thresholdMaskInverted) * (1.0 - mm);",
             "}"
@@ -27,7 +27,7 @@
                 "description": "This property defines a lower threshold value for the mask pixels. The mask pixels that have an alpha value below this property are used to completely mask away the corresponding pixels from the source item. The mask pixels that have a higher alpha value are used to alphablend the source item to the display.\n\nThe value ranges from 0.0 (alpha value 0) to 1.0 (alpha value 255). By default, the property is set to 0.0.",
                 "maxValue": "1",
                 "minValue": "0",
-                "name": "maskThresholdLow",
+                "name": "thresholdMaskThresholdLow",
                 "type": "float"
             },
             {
@@ -35,7 +35,7 @@
                 "description": "This property defines the smoothness of the mask edges near the maskThresholdLow. Setting higher spread values softens the transition from the transparent mask pixels towards opaque mask pixels by adding interpolated values between them.\n\nThe value ranges from 0.0 (sharp mask edge) to 1.0 (smooth mask edge). By default, the property is set to 0.0.",
                 "maxValue": "1",
                 "minValue": "0",
-                "name": "maskSpreadLow",
+                "name": "thresholdMaskSpreadLow",
                 "type": "float"
             },
             {
@@ -43,7 +43,7 @@
                 "description": "This property defines an upper threshold value for the mask pixels. The mask pixels that have an alpha value below this property are used to completely mask away the corresponding pixels from the source item. The mask pixels that have a higher alpha value are used to alphablend the source item to the display.\n\nThe value ranges from 0.0 (alpha value 0) to 1.0 (alpha value 255). By default, the property is set to 1.0.\n  ",
                 "maxValue": "1",
                 "minValue": "0",
-                "name": "maskThresholdUp",
+                "name": "thresholdMaskThresholdUp",
                 "type": "float"
             },
             {
@@ -51,7 +51,7 @@
                 "description": "This property defines the smoothness of the mask edges near the maskThresholdUp. Using higher spread values softens the transition from the transparent mask pixels towards opaque mask pixels by adding interpolated values between them.\n\nThe value ranges from 0.0 (sharp mask edge) to 1.0 (smooth mask edge). By default, the property is set to 0.0.",
                 "maxValue": "1",
                 "minValue": "0",
-                "name": "maskSpreadUp",
+                "name": "thresholdMaskSpreadUp",
                 "type": "float"
             },
             {

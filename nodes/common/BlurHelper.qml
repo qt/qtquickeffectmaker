@@ -13,8 +13,8 @@ Item {
     property alias blurSrc6: blurredItemSource6
 
     component BlurItem : ShaderEffect {
-        property vector2d offset: Qt.vector2d((1.0 + rootItem.blurMultiplier) / width,
-                                              (1.0 + rootItem.blurMultiplier) / height)
+        property vector2d offset: Qt.vector2d((1.0 + rootItem.blurHelperBlurMultiplier) / width,
+                                              (1.0 + rootItem.blurHelperBlurMultiplier) / height)
         visible: false
         smooth: true
         vertexShader: "bluritems.vert.qsb"

@@ -673,7 +673,7 @@ void EffectManager::updateCustomUniforms()
             bindedValue = value;
         }
         // Note: Define type properties appear also as QML properties (in preview) in case QML side
-        // needs to use them. This is used at least by BlurHelper max_blur_level.
+        // needs to use them. This is used at least by BlurHelper BLUR_HELPER_MAX_LEVEL.
         QString propertyName = isDefine ? uniform.name.toLower() : uniform.name;
         if (!uniform.useCustomValue && !isDefine && !uniform.description.isEmpty()) {
             // When exporting, add API documentation for properties
@@ -793,10 +793,10 @@ QString EffectManager::getQmlEffectString()
         s += "        id: blurHelper\n";
         s += "        anchors.fill: parent\n";
         int blurMax = 32;
-        if (g_propertyData.contains("MAX_BLUR_LEVEL"))
-            blurMax = g_propertyData["MAX_BLUR_LEVEL"].toInt();
+        if (g_propertyData.contains("BLUR_HELPER_MAX_LEVEL"))
+            blurMax = g_propertyData["BLUR_HELPER_MAX_LEVEL"].toInt();
         s += QString("        property int blurMax: %1\n").arg(blurMax);
-        s += "        property real blurMultiplier: rootItem.blurMultiplier\n";
+        s += "        property real blurHelperBlurMultiplier: rootItem.blurHelperBlurMultiplier\n";
         s += "    }\n";
     }
     s += getQmlComponentString(true);

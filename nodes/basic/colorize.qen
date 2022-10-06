@@ -53,7 +53,7 @@
         "properties": [
             {
                 "defaultValue": "1",
-                "description": "This property defines the hue value which is used to colorize the source.\n\nThe value ranges from 0.0 to 1.0. By default, the property is set to \\c 0.0, which produces a slightly red color.\n",
+                "description": "This property defines the hue value which is used to colorize the source.\n\nThe value ranges from 0.0 to 1.0. By default, the property is set to \\c 0.0, which produces a slightly red color.",
                 "maxValue": "1",
                 "minValue": "0",
                 "name": "colorizeHue",
@@ -61,7 +61,7 @@
             },
             {
                 "defaultValue": "1",
-                "description": "This property defines the saturation value which is used to colorize the source.\n\nThe value ranges from 0.0 (desaturated) to 1.0 (saturated). By default, the property is set to \\c 1.0 (saturated).\n",
+                "description": "This property defines the saturation value which is used to colorize the source.\n\nThe value ranges from 0.0 (desaturated) to 1.0 (saturated). By default, the property is set to \\c 1.0 (saturated).",
                 "maxValue": "1",
                 "minValue": "0",
                 "name": "colorizeSaturation",

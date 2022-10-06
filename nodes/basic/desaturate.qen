@@ -5,7 +5,7 @@
             "//main",
             "{",
             "    float grayColor = (fragColor.r + fragColor.g + fragColor.b) / 3.0;",
-            "    fragColor = mix(fragColor, vec4(vec3(grayColor), fragColor.a), desaturation);",
+            "    fragColor = mix(fragColor, vec4(vec3(grayColor), fragColor.a), desaturateDesaturation);",
             "}"
         ],
         "name": "Desaturate",
@@ -15,7 +15,7 @@
                 "description": "This property defines how much the source colors are desaturated.\n\nThe value ranges from 0.0 (no change) to 1.0 (desaturated). By default, the property is set to \\c 0.0 (no change).",
                 "maxValue": "1",
                 "minValue": "0",
-                "name": "desaturation",
+                "name": "desaturateDesaturation",
                 "type": "float"
             }
         ],

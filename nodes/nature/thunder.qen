@@ -69,7 +69,7 @@
                 "minValue": "0",
                 "name": "thunderStrike",
                 "type": "float",
-                "useCustomValue": "true"
+                "useCustomValue": true
             },
             {
                 "customValue": "1",
@@ -79,7 +79,7 @@
                 "minValue": "0",
                 "name": "thunderIndex",
                 "type": "int",
-                "useCustomValue": "true"
+                "useCustomValue": true
             }
         ],
         "qmlCode": [

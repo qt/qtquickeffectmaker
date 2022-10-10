@@ -116,7 +116,7 @@
                 "minValue": "0",
                 "name": "cloudsXSpeed",
                 "type": "float",
-                "useCustomValue": "true"
+                "useCustomValue": true
             },
             {
                 "customValue": "Math.cos(cloudsMovementAngle / 180 * Math.PI) * cloudsSpeed",
@@ -125,7 +125,7 @@
                 "minValue": "0",
                 "name": "cloudsYSpeed",
                 "type": "float",
-                "useCustomValue": "true"
+                "useCustomValue": true
             }
         ],
         "version": 1,

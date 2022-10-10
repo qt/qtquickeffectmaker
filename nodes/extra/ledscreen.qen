@@ -63,7 +63,7 @@
                 "description": "Helper property for the scaled source item.",
                 "name": "scaledSourceImage",
                 "type": "image",
-                "useCustomValue": "true"
+                "useCustomValue": true
             }
         ],
         "qmlCode": [

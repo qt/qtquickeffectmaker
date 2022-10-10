@@ -41,6 +41,24 @@ static void removeIfExists(const QString &filePath)
         file.remove();
 }
 
+// Returns the boolean value of QJsonValue. It can be either boolean
+// (true, false) or string ("true", "false"). Returns the defaultValue
+// if QJsonValue is undefined, empty, or some other type.
+static bool getBoolValue(const QJsonValue &jsonValue, bool defaultValue)
+{
+    bool returnValue = defaultValue;
+    if (jsonValue.isBool()) {
+        returnValue = jsonValue.toBool();
+    } else if (jsonValue.isString()) {
+        QString s = jsonValue.toString().toLower();
+        if (s == QStringLiteral("true"))
+            returnValue = true;
+        else if (s == QStringLiteral("false"))
+            returnValue = false;
+    }
+    return returnValue;
+}
+
 EffectManager::EffectManager(QObject *parent) : QObject(parent)
 {
     m_settings = new ApplicationSettings(this);
@@ -1219,7 +1237,7 @@ bool EffectManager::createNodeFromJson(const QJsonObject &rootJson, NodesModel::
     if (json.contains("y"))
         node.y = json["y"].toDouble();
     if (json.contains("disabled"))
-        node.disabled = json["disabled"].toString() == QStringLiteral("true") ? true : false;
+        node.disabled = getBoolValue(json["disabled"], false);
 
     if (m_nodeView) {
         // Update the node size based on its type
@@ -1245,14 +1263,14 @@ bool EffectManager::createNodeFromJson(const QJsonObject &rootJson, NodesModel::
             u.name = propertyObject["name"].toString().toUtf8();
             u.description = propertyObject["description"].toString();
             u.type = m_uniformModel->typeFromString(propertyObject["type"].toString());
-            u.exportProperty = propertyObject["exported"].toBool(true);
+            u.exportProperty = getBoolValue(propertyObject["exported"], true);
             QString value, defaultValue, minValue, maxValue;
             defaultValue = propertyObject["defaultValue"].toString();
             if (u.type == UniformModel::Uniform::Type::Sampler) {
                 if (!defaultValue.isEmpty())
                     defaultValue = relativeToAbsolutePath(defaultValue, nodePath);
                 if (propertyObject.contains("enableMipmap"))
-                    u.enableMipmap = propertyObject["enableMipmap"].toBool(false);
+                    u.enableMipmap = getBoolValue(propertyObject["enableMipmap"], false);
                 // Update the mipmap property
                 QString mipmapProperty = mipmapPropertyName(u.name);
                 g_propertyData[mipmapProperty] = u.enableMipmap;
@@ -1266,8 +1284,7 @@ bool EffectManager::createNodeFromJson(const QJsonObject &rootJson, NodesModel::
                 value = defaultValue;
             }
             u.customValue = propertyObject["customValue"].toString();
-
-            u.useCustomValue = propertyObject["useCustomValue"].toString() == QStringLiteral("true") ? true : false;
+            u.useCustomValue = getBoolValue(propertyObject["useCustomValue"], false);
             minValue = propertyObject["minValue"].toString();
             maxValue = propertyObject["maxValue"].toString();
             m_uniformModel->setUniformValueData(&u, value, defaultValue, minValue, maxValue);
@@ -1652,7 +1669,7 @@ QJsonObject EffectManager::nodeToJson(const NodesModel::Node &node, bool simplif
         nodeObject.insert("x", node.x);
         nodeObject.insert("y", node.y);
         if (node.disabled)
-            nodeObject.insert("disabled", "true");
+            nodeObject.insert("disabled", true);
     } else {
         nodeObject.insert("version", 1);
     }
@@ -1691,7 +1708,7 @@ QJsonObject EffectManager::nodeToJson(const NodesModel::Node &node, bool simplif
         if (!uniform.customValue.isEmpty())
             uniformObject.insert("customValue", uniform.customValue);
         if (uniform.useCustomValue)
-            uniformObject.insert("useCustomValue", "true");
+            uniformObject.insert("useCustomValue", true);
 
         if (!uniform.exportProperty)
             uniformObject.insert("exported", false);

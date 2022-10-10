@@ -1245,6 +1245,7 @@ bool EffectManager::createNodeFromJson(const QJsonObject &rootJson, NodesModel::
             u.name = propertyObject["name"].toString().toUtf8();
             u.description = propertyObject["description"].toString();
             u.type = m_uniformModel->typeFromString(propertyObject["type"].toString());
+            u.exportProperty = propertyObject["exported"].toBool(true);
             QString value, defaultValue, minValue, maxValue;
             defaultValue = propertyObject["defaultValue"].toString();
             if (u.type == UniformModel::Uniform::Type::Sampler) {
@@ -1270,7 +1271,6 @@ bool EffectManager::createNodeFromJson(const QJsonObject &rootJson, NodesModel::
             minValue = propertyObject["minValue"].toString();
             maxValue = propertyObject["maxValue"].toString();
             m_uniformModel->setUniformValueData(&u, value, defaultValue, minValue, maxValue);
-
             node.jsonUniforms << u;
         }
     }
@@ -1692,6 +1692,9 @@ QJsonObject EffectManager::nodeToJson(const NodesModel::Node &node, bool simplif
             uniformObject.insert("customValue", uniform.customValue);
         if (uniform.useCustomValue)
             uniformObject.insert("useCustomValue", "true");
+
+        if (!uniform.exportProperty)
+            uniformObject.insert("exported", false);
 
         propertiesArray.append(uniformObject);
     }

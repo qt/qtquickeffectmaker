@@ -18,6 +18,10 @@ Item {
         tabBarViews.currentIndex = 1;
     }
 
+    function renderToImage(filename) {
+        effectPreview.renderToImage(filename);
+    }
+
     FpsHelper {
         id: fpsHelper
         enabled: previewAnimationRunning

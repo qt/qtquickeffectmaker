@@ -190,6 +190,10 @@ ApplicationWindow {
                 text: qsTr("QSB Inspector");
                 onTriggered: qsbInspectorAction();
             }
+            Action {
+                text: qsTr("Render to Image");
+                onTriggered: renderToImageAction();
+            }
         }
         Menu {
             title: qsTr("&Help")
@@ -258,6 +262,16 @@ ApplicationWindow {
         onAccepted: {
             if (currentFile)
                 effectManager.saveSelectedNode(currentFile)
+        }
+    }
+
+    FileDialog {
+        id: saveImageAsDialog
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["Portable Network Graphics (*.png)"]
+        onAccepted: {
+            if (currentFile)
+                mainView.outputView.renderToImage(currentFile);
         }
     }
 
@@ -509,6 +523,12 @@ ApplicationWindow {
     function showFindBarAction() {
         mainView.showFindBar = true;
         mainView.currentEditorComponent.findAction();
+    }
+
+    function renderToImageAction() {
+        if (saveImageAsDialog.currentFile == "")
+            saveImageAsDialog.currentFile = "effect_render.png";
+        saveImageAsDialog.open();
     }
 
     MainView {

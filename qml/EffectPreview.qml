@@ -25,6 +25,12 @@ Item {
         effectPreviewToolbar.updateScaleSlider(optimalScale);
     }
 
+    function renderToImage(filename) {
+        componentParent.grabToImage(function(result) {
+            result.saveToFile(filename);
+        });
+    }
+
     clip: true
 
     Image {

@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QTemporaryFile>
 #include <QTimer>
+#include <QQmlPropertyMap>
 #include "uniformmodel.h"
 #include "nodeview.h"
 #include "shaderfeatures.h"
@@ -15,6 +16,9 @@
 #include "addnodemodel.h"
 #include "applicationsettings.h"
 #include "codehelper.h"
+
+// This will be used for commandline arguments.
+extern QQmlPropertyMap g_argData;
 
 struct EffectError {
     Q_GADGET
@@ -228,6 +232,7 @@ private:
     // Used in preview QML, at ShaderEffect component of the file
     QString m_previewEffectPropertiesString;
     bool m_unsavedChanges = false;
+    bool m_firstBake = true;
     // Full path of the project file
     QUrl m_projectFilename;
     // Path to where project file is located

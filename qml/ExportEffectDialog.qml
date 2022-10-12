@@ -43,14 +43,10 @@ CustomDialog {
     }
 
     function initialPath() {
-        if (effectManager.exportFilename != "") {
-            // Note: Testing for exportFilename above instead of exportDirectory, as first
-            // exist whenever project has been exported and we want to allow exporting
-            // to same directory ("") where qep is.
+        if (effectManager.exportDirectory != "")
             return effectManager.stripFileFromURL(effectManager.exportDirectory);
-        } else {
+        else
             return effectManager.stripFileFromURL(defaultPath);
-        }
     }
 
     FolderDialog {

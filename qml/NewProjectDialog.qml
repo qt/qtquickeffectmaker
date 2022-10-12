@@ -13,6 +13,7 @@ CustomDialog {
 
     property string defaultPath: StandardPaths.standardLocations(StandardPaths.DesktopLocation)[0]
     property bool clearNodeView: false
+
     title: qsTr("New Effect Project")
     width: 540
     height: 400
@@ -22,10 +23,7 @@ CustomDialog {
     closePolicy: Popup.NoAutoClose
 
     Component.onCompleted: {
-        pathTextEdit.text = g_propertyData["effects_path"]
-                ? g_propertyData["effects_path"]
-                : effectManager.stripFileFromURL(defaultPath);
-        pathTextEdit.enabled = true;
+        pathTextEdit.text = effectManager.stripFileFromURL(defaultPath);
         nameTextEdit.text = "Effect01"
     }
 
@@ -76,8 +74,6 @@ CustomDialog {
         }
     }
     onAccepted: {
-        g_propertyData.effects_path = pathTextEdit.text
-        g_propertyData.effects_project_path = nameTextEdit.text
         mainView.mainToolbar.setDesignModeInstantly(true);
         effectManager.newProject(pathTextEdit.text, nameTextEdit.text, clearNodeView, true);
     }

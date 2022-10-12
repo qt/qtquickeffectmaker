@@ -20,20 +20,7 @@ ApplicationWindow {
     property bool canUndo: !mainView.designMode && currentEditorComponent ? currentEditorComponent.canUndo : false
     property bool canRedo: !mainView.designMode && currentEditorComponent ? currentEditorComponent.canRedo : false
     property bool canFind: !mainView.designMode && currentEditorComponent
-    property bool initialised: false
     property bool quitAccepted: false
-
-    onAfterSynchronizing: {
-        if (!initialised) {
-            var projectPath = g_propertyData.effects_project_path
-            if (projectPath) {
-                projectPath = "file://" + projectPath
-                effectManager.loadProject(projectPath);
-            }
-
-            initialised = true;
-        }
-    }
 
     onClosing: function(close) {
         maybeQuitAction();

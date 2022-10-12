@@ -5,6 +5,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QtCore/QCommandLineParser>
+#include <QDir>
 #include "src/effectmanager.h"
 #include "src/nodeview.h"
 #include "src/propertyhandler.h"
@@ -32,37 +33,41 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("qt.io");
     app.setApplicationName("Qt Quick Effect Maker");
     app.setApplicationVersion(QLatin1String(APP_VERSION_STR));
-    QQmlApplicationEngine engine;
 
     // Setup command line arguments
     QCommandLineParser cmdLineParser;
+    cmdLineParser.setApplicationDescription("Qt Quick Effect Maker - Tool to create custom Qt Quick shader effects.");
     cmdLineParser.addHelpOption();
     cmdLineParser.addVersionOption();
 
     // Add the cmd options
-    QCommandLineOption effectsPath("effectspath",
-                                   QStringLiteral("Path for effects in spcific QDS project"), "_");
-    QCommandLineOption projectPath("projectpath",
-                                   QStringLiteral("Effects project file (*.qep) to open"), "_");
-    cmdLineParser.addOptions({effectsPath, projectPath});
-    cmdLineParser.setOptionsAfterPositionalArgumentsMode(QCommandLineParser::ParseAsOptions);
+    cmdLineParser.addPositionalArgument("project", QStringLiteral("Effects project file (*.qep) to open"));
+    QCommandLineOption exportPathOption("exportpath",
+                                        "Path used for exporting the effect",
+                                        "exportpath");
+    QCommandLineOption createOption("create",
+                                   "Create a new project with the given project file");
+    cmdLineParser.addOptions({exportPathOption, createOption});
 
+    cmdLineParser.process(app.arguments());
+    const QStringList args = cmdLineParser.positionalArguments();
     // Parsing args
-    bool parsed = cmdLineParser.parse(app.arguments());
-    if (!parsed) {
-        auto parseError = cmdLineParser.errorText();
-        qWarning() << qPrintable("Error: " + parseError);
-        return 1;
+    if (args.count() > 0) {
+        QString projectPath = QDir::fromNativeSeparators(args.at(0));
+        g_argData.insert("effects_project_path", projectPath);
     }
-
-    // Store args
-    if (cmdLineParser.isSet(effectsPath)) {
-        auto val = cmdLineParser.value(effectsPath);
-        g_propertyData.insert("effects_path", QVariant(val));
+    if (cmdLineParser.isSet(exportPathOption)) {
+        auto val = cmdLineParser.value(exportPathOption);
+        QString exportPath = QDir::fromNativeSeparators(val);
+        g_argData.insert("export_path", exportPath);
     }
-    if (cmdLineParser.isSet(projectPath)) {
-        auto val = cmdLineParser.value(projectPath);
-        g_propertyData.insert("effects_project_path", QVariant(val));
+    bool createProject = cmdLineParser.isSet(createOption);
+    if (createProject) {
+        if (args.isEmpty()) {
+            qWarning("Error: Creating a new project requires also the project parameter.");
+            exit(1);
+        }
+        g_argData.insert("create_project", createProject);
     }
 
     qmlRegisterType<EffectManager>("QQEMLib", 1, 0, "EffectManager");
@@ -71,8 +76,10 @@ int main(int argc, char *argv[])
     qmlRegisterType<SyntaxHighlighter>("QQEMLib", 1, 0, "SyntaxHighlighter");
     qmlRegisterType<QsbInspectorHelper>("QQEMLib", 1, 0, "QsbInspectorHelper");
 
+    QQmlApplicationEngine engine;
     QQmlContext *context = engine.rootContext();
     if (context) {
+        context->setContextProperty("g_argData", &g_argData);
         context->setContextProperty("g_propertyData", &g_propertyData);
         context->setContextProperty("buildQtVersion", QLatin1String(QT_VERSION_STR));
     } else {

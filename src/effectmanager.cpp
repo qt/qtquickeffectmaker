@@ -13,6 +13,8 @@
 #include <QtQml/qqmlfile.h>
 #include <QXmlStreamWriter>
 
+QQmlPropertyMap g_argData;
+
 enum class FileType
 {
     Binary,
@@ -65,13 +67,6 @@ EffectManager::EffectManager(QObject *parent) : QObject(parent)
     setUniformModel(new UniformModel(this));
     m_addNodeModel = new AddNodeModel(this);
     m_codeHelper = new CodeHelper(this);
-
-    if (g_propertyData.keys().contains("effects_project_path")) {
-        QString proPath = g_propertyData["effects_project_path"].toString();
-        QString fullProName = proPath.split("/").last();
-        m_projectName = fullProName.remove(fullProName.length()  - 4, 4);
-        m_projectFilename = "file://" + proPath;
-    }
 
     m_vertexShaderFile.setFileTemplate(QDir::tempPath() + "/qqem_XXXXXX.vert.qsb");
     m_fragmentShaderFile.setFileTemplate(QDir::tempPath() + "/qqem_XXXXXX.frag.qsb");
@@ -168,7 +163,7 @@ bool EffectManager::unsavedChanges() const
 
 void EffectManager::setUnsavedChanges(bool newUnsavedChanges)
 {
-    if (m_unsavedChanges == newUnsavedChanges)
+    if (m_unsavedChanges == newUnsavedChanges || m_firstBake)
         return;
     m_unsavedChanges = newUnsavedChanges;
     emit unsavedChangesChanged();
@@ -499,6 +494,7 @@ void EffectManager::doBakeShaders()
         Q_EMIT shadersBaked();
         setShadersUpToDate(true);
     }
+    m_firstBake = false;
 }
 
 const QString EffectManager::getBufUniform()
@@ -942,14 +938,34 @@ void EffectManager::setNodeView(NodeView *newNodeView)
 }
 
 // This will be called once when nodesview etc. components exist
-void EffectManager::initialize() {
+void EffectManager::initialize()
+{
     bool projectOpened = false;
-    if (g_propertyData.contains("effects_project_name")) {
-        // Open project given as commandline parameter
-        QString projectFile = g_propertyData.value("effects_project_name").toString();
+    QString overrideExportPath;
+    if (g_argData.contains("export_path")) {
+        // Set export path first, so it gets saved if new project is created
+        overrideExportPath = g_argData.value("export_path").toString();
+        m_exportDirectory = overrideExportPath;
+    }
+
+    if (g_argData.contains("effects_project_path")) {
+        // Open or create project given as commandline parameter
+        QString projectFile = g_argData.value("effects_project_path").toString();
         QString currentPath = QDir::currentPath();
         QString fullFilePath = relativeToAbsolutePath(projectFile, currentPath);
-        projectOpened = loadProject(fullFilePath);
+        bool createProject = g_argData.contains("create_project");
+        if (createProject) {
+            QFileInfo fi(fullFilePath);
+            projectOpened = newProject(fi.path(), fi.baseName(), true, false);
+        } else {
+            projectOpened = loadProject(fullFilePath);
+        }
+    }
+
+    if (!overrideExportPath.isEmpty()) {
+        // Re-apply export path as loading the project may have changed it
+        m_exportDirectory = overrideExportPath;
+        Q_EMIT exportDirectoryChanged();
     }
 
     if (!projectOpened) {
@@ -1528,9 +1544,6 @@ bool EffectManager::loadProject(const QUrl &filename)
 
     setUnsavedChanges(false);
 
-    if (g_propertyData.contains("effects_project_path"))
-        g_propertyData["effects_project_path"] = m_projectFilename;
-
     return true;
 }
 
@@ -1787,7 +1800,11 @@ bool EffectManager::newProject(const QString &filepath, const QString &filename,
     Q_EMIT projectDirectoryChanged();
 
     // Create project file
-    m_projectFilename = "file:///" + dirPath + "/" + filename + ".qep";
+    QString projectFilename;
+    if (!dirPath.startsWith("file:"))
+        projectFilename += "file:///";
+    projectFilename += dirPath + "/" + filename + ".qep";
+    m_projectFilename = projectFilename;
     Q_EMIT projectFilenameChanged();
     Q_EMIT hasProjectFilenameChanged();
 

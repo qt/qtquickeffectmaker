@@ -80,7 +80,6 @@ Item {
         anchors.fill: parent
         orientation: Qt.Horizontal
         Item {
-            SplitView.fillHeight: true
             SplitView.preferredWidth: mainView.width * currentLeftViewWidth
             SplitView.minimumWidth: mainView.width * 0.2
             SplitView.maximumWidth: mainView.width * 0.8
@@ -158,17 +157,15 @@ Item {
         CustomSplitView {
             SplitView.fillWidth: true
             orientation: Qt.Vertical
+            clip: true
             PropertiesView {
                 id: propertiesView
-                SplitView.preferredHeight: mainView.height * 0.3
-                Layout.fillHeight: true
-                Layout.fillWidth: true
+                SplitView.preferredHeight: 200
             }
             OutputView {
                 id: outputView
-                SplitView.preferredWidth: mainView.width * 0.5
-                Layout.fillHeight: true
-                SplitView.fillWidth: true
+                SplitView.fillHeight: true
+                SplitView.minimumHeight: 48
             }
         }
     }

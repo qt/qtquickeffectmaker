@@ -43,7 +43,13 @@ Item {
             width: 100
         }
     }
+    Rectangle {
+        anchors.fill: toolbarRow
+        color: mainView.backgroundColor1
+        opacity: 0.8
+    }
     Row {
+        id: toolbarRow
         anchors.right: parent.right
         anchors.verticalCenter: tabBarViews.verticalCenter
         height: tabBarViews.height * 0.8

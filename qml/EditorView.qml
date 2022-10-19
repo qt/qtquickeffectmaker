@@ -68,6 +68,11 @@ Item {
                     opacity: fragmentText.length === 0 ? 0.3 : 1.0
                 }
             }
+            Rectangle {
+                anchors.fill: editToolbar
+                color: mainView.backgroundColor1
+                opacity: 0.8
+            }
             Row {
                 id: editToolbar
                 visible: editorView.editable

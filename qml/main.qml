@@ -29,6 +29,8 @@ ApplicationWindow {
 
     width: 1200
     height: 800
+    minimumWidth: 600
+    minimumHeight: 400
     visible: true
     title: qsTr("%1Qt Quick Effect Maker ").arg(mainWindow.projectTitle)
     color: mainView.backgroundColor1

@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Generates fog/clouds/smoke effect.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    float time = iTime * 0.5;",
             "    float coordX = fract((fogMovement.x * time + texCoord.x) * fogTextureScale.x);",
@@ -54,12 +54,12 @@
         ],
         "version": 1,
         "vertexCode": [
-            "//mesh 16, 16",
+            "@mesh 16, 16",
             "out vec3 fogAnimation;",
             "// 1/3 and 2/3 of TAU",
             "#define TAU_13 2.09439510239",
             "#define TAU_23 4.18879020478",
-            "//main",
+            "@main",
             "{",
             "    float time = iTime * fogAnimationSpeed;",
             "    const float fogBaseOpacity = 0.3;",

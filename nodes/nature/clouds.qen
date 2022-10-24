@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Draws animated sky by rendering tiled clouds texture with a perspective",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    vec4 texclouds = texture(cloudsTexture, fract(tc));",
             "    texclouds.r = smoothstep(thresholds.s,  thresholds.t, texclouds.r) * cloudsBrightness;",
@@ -130,14 +130,14 @@
         ],
         "version": 1,
         "vertexCode": [
-            "//mesh 20,20",
+            "@mesh 20,20",
             "",
             "out float glowFactor;",
             "out float z;",
             "out vec2 tc;",
             "out vec2 thresholds;",
             "",
-            "//main",
+            "@main",
             "{",
             "    const float invY = 1. - texCoord.y;",
             "    z = 1. / (1. - cloudsPerspective + cloudsPerspective * invY);",

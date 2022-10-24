@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Desaturated pixel values are calculated as averages of the original RGB component values of the source item.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    float grayColor = (fragColor.r + fragColor.g + fragColor.b) / 3.0;",
             "    fragColor = mix(fragColor, vec4(vec3(grayColor), fragColor.a), desaturateDesaturation);",

@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Generates normal mapping effect where texture is used for adding 3D appearance for the source item. This is useful for example to faking the lighting of bumps and dents.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    vec2 coord = vec2(fract(texCoord * normalMapTextureScale));",
             "    vec4 normalMapTexture = texture(normalMapImage, coord);",

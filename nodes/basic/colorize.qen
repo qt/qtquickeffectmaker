@@ -40,7 +40,7 @@
             "    float b = hueToIntensity(v1, v2, h - d);",
             "    return vec3(r, g, b);",
             "}",
-            "//main",
+            "@main",
             "{",
             "    vec4  samp = vec4(fragColor.rgb / max(1.0/256.0, fragColor.a), fragColor.a);",
             "    float light = RGBtoL(samp.rgb);",

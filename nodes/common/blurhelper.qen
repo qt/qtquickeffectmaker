@@ -2,7 +2,7 @@
     "QEN": {
         "description": "This node is required e.g. for FastBlur and DropShadow. It generates blurred iSourceBlur[1..6] samplers to be available for shaders.",
         "fragmentCode": [
-            "//blursources"
+            "@blursources"
         ],
         "name": "BlurHelper",
         "properties": [

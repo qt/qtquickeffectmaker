@@ -142,21 +142,26 @@ void SyntaxHighlighter::highlightBlock(const QString &text)
                 if (m_argumentKeywords.contains(QByteArrayView(data.constData() + tk.position, tk.length)))
                     setFormat(tk.position, tk.length, formatForCategory(C_PARAMETER));
             }
-            if (kind == GLSL::Parser::T_RESERVED)
+            if (kind == GLSL::Parser::T_RESERVED) {
                 setFormat(tk.position, tk.length, formatForCategory(GLSLReservedKeyword));
-            else if (kind != GLSL::Parser::T_IDENTIFIER)
+            } else if (kind != GLSL::Parser::T_IDENTIFIER) {
                 setFormat(tk.position, tk.length, formatForCategory(C_KEYWORD));
+            } else {
+                const auto tagStartPos = tk.position - 1;
+                bool isTag = data.at(tagStartPos) == '@';
+                if (isTag) {
+                    const auto tagLength = tk.length + 1;
+                    auto line = QByteArrayView(data.constData() + tagStartPos, tagLength).trimmed();
+                    auto firstSpace = line.indexOf(' ');
+                    QByteArrayView firstWord;
+                    if (firstSpace > 0)
+                        firstWord = line.sliced(0, firstSpace);
+                    if (m_tagKeywords.contains(line) || (!firstWord.isEmpty() && m_tagKeywords.contains(firstWord)))
+                        setFormat(tagStartPos, tagLength, formatForCategory(C_TAG));
+                }
+            }
         } else if (tk.is(GLSL::Parser::T_COMMENT)) {
-            auto line = QByteArrayView(data.constData() + tk.position, tk.length).trimmed();
-            auto firstSpace = line.indexOf(' ');
-            QByteArrayView firstWord;
-            if (firstSpace > 0)
-                firstWord  = line.sliced(0, firstSpace);
-            // Tags are comments
-            if (m_tagKeywords.contains(line) || (!firstWord.isEmpty() && m_tagKeywords.contains(firstWord)))
-                setFormat(tk.position, tk.length, formatForCategory(C_TAG));
-            else
-                highlightLine(text, tk.begin(), tk.length, formatForCategory(C_COMMENT));
+            highlightLine(text, tk.begin(), tk.length, formatForCategory(C_COMMENT));
         }
     }
 

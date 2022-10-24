@@ -2,7 +2,7 @@
     "QEN": {
         "description": "The DropShadow effect blurs the alpha channel of the input, colorizes the result and places it behind the source object to create a soft shadow.\n\nNote: Requires BlurHelper node.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    float shadow = texture(iSourceBlur1, shadowTexCoord).a * shadowBlurWeight1[0];",
             "    shadow += texture(iSourceBlur2, shadowTexCoord).a * shadowBlurWeight1[1];",
@@ -72,7 +72,7 @@
             "    return max(0.0, min(1.0, 1.0 - v * 2.0));",
             "}",
             "",
-            "//main",
+            "@main",
             "float shadowBlurLod = sqrt(shadowBlurAmount * (BLUR_HELPER_MAX_LEVEL / 64.0)) * 1.2 - 0.2;",
             "float sbw1 = shadowBlurWeight(abs(shadowBlurLod - 0.1));",
             "float sbw2 = shadowBlurWeight(abs(shadowBlurLod - 0.3));",

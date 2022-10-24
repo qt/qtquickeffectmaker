@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Adds lava effect to the source. The effect is based on texture so it is easy to adjust to different needs.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    vec4 lavaTexture = texture(lavaImage, lavaTexturePos);",
             "    vec4 lava = lavaTexture * lavaTextureColor;",
@@ -42,10 +42,10 @@
         ],
         "version": 1,
         "vertexCode": [
-            "//mesh 16, 16",
+            "@mesh 16, 16",
             "out vec2 lavaTexturePos;",
             "out vec4 lavaTextureColor;",
-            "//main",
+            "@main",
             "{",
             "    float time = iTime * lavaAnimationSpeed;",
             "    lavaTexturePos = texCoord;",

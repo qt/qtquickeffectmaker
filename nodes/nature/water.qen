@@ -4,7 +4,7 @@
         "fragmentCode": [
             "#define TAU 6.28318530718",
             "",
-            "//main",
+            "@main",
             "{",
             "    const float time = 1.0 + iTime * 0.6;",
             "    const vec2 uv = texCoord;",

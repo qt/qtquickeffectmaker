@@ -27,10 +27,10 @@ static constexpr QByteArrayView shader_arg_names[] {
 };
 
 static constexpr QByteArrayView shader_tag_names[] {
-    { "//main" },
-    { "//nodes" },
-    { "//mesh" },
-    { "//blursources" }
+    { "@main" },
+    { "@nodes" },
+    { "@mesh" },
+    { "@blursources" }
 };
 
 // From https://registry.khronos.org/OpenGL/specs/gl/GLSLangSpec.4.40.pdf

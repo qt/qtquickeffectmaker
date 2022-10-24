@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Applies vignette effect to the source, so adds darkening / color towards the corners.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    float vigDist = distance(texCoord, vec2(0.5));",
             "    vec4 vigColor = vec4(vignetteColor.rgb, smoothstep(vignetteInnerRadius, vignetteOuterRadius, vigDist));",

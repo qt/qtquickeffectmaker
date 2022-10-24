@@ -6,7 +6,7 @@
             "{",
             "    return clamp((x - e0) / (e1 - e0), 0.0, 1.0);",
             "}",
-            "//main",
+            "@main",
             "{",
             "    vec4 offset = texture(displaceDisplacementSource, texCoord);",
             "    offset.xy -= vec2(0.5, 0.5);",

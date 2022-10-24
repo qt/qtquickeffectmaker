@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Generates rain effect.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    float rain = 0.0;",
             "    float time = iTime * 0.4;",

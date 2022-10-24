@@ -78,7 +78,7 @@
             "    return noiseVal * SQRT2;",
             "}",
             "",
-            "//main"
+            "@main"
         ],
         "name": "NoiseHelper",
         "version": 1

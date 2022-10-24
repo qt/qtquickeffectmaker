@@ -26,16 +26,16 @@ Qt Quick Effect Maker is a tool for creating custom shader effects for Qt Quick.
 </table>
 <br>
 <h2>Tags</h2>
-Tags are special comments which are looked for from the shader sources. Format of these tags must be exactly as explained here, so don't modify them unless needed.
+Tags are special commands which are looked for from the shader sources. Format of these tags must be exactly as explained here, so don't modify them unless needed.
 <table cellpadding="2">
 <tr>
-<td><b>//main</b></td><td>This tag can be used in both vertex and fragment shaders to separate code which belongs into root and inside main() method. If the tag is missing, all code goes into main.</td>
+<td><b>@main</b></td><td>This tag can be used in both vertex and fragment shaders to separate code which belongs into root and inside main() method. If the tag is missing, all code goes into main.</td>
 </tr><tr>
-<td><b>//nodes</b></td><td>This tag is used in the main node vertex and fragment shaders. It will get replaced with the main shader code of the following nodes.</td>
+<td><b>@nodes</b></td><td>This tag is used in the main node vertex and fragment shaders. It will get replaced with the main shader code of the following nodes.</td>
 </tr><tr>
-<td><b>//mesh w, h</b></td><td>This optional tag is used in the vertex shaders to define GridMesh size. The default mesh size is (1, 1). If mesh tag is used multiple times (by different nodes), biggest values will be used. Example: "//mesh 20, 10" creates horizontally 20 and vertically 10 vertices grid mesh.</td>
+<td><b>@mesh w, h</b></td><td>This optional tag is used in the vertex shaders to define GridMesh size. The default mesh size is (1, 1). If mesh tag is used multiple times (by different nodes), biggest values will be used. Example: "@mesh 20, 10" creates horizontally 20 and vertically 10 vertices grid mesh.</td>
 </tr><tr>
-<td><b>//blursources</b></td><td>This optional tag is used by BlurHelper to generate pre-blurred sources (iSourceBlur1-6) which other nodes can then utilize.</td>
+<td><b>@blursources</b></td><td>This optional tag is used by BlurHelper to generate pre-blurred sources (iSourceBlur1-6) which other nodes can then utilize.</td>
 </tr>
 </table>
 <br>

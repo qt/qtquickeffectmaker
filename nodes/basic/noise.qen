@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Adds RGB or unified noise to the source item.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "#if (NOISE_USE_RGB == 1)",
             "#if (NOISE_USE_RANDOM == 1)",

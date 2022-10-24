@@ -135,6 +135,8 @@ QString CodeHelper::autoIndentGLSLCode(const QString &code)
             continue;
         }
 
+        bool isTag = c.startsWith('@');
+
         // Separate content after "//" to commenPart
         QString commentPart;
         int lineCommentIndex = c.indexOf("//");
@@ -175,26 +177,28 @@ QString CodeHelper::autoIndentGLSLCode(const QString &code)
         index = std::max(index, 0);
         indent.clear();
         int currentIndex = indexChange > 0 ? prevIndex : index;
-        if (currentIndex > 0 && startBlocks > 0 && endBlocks > 0) {
-            // Note: "} else {", "} else if () {"
-            // Indent one step lower
-            currentIndex--;
-        } else if (endBrackets > startBrackets) {
-            // Note: "variable)"
-            // Indent one step higher
-            currentIndex++;
-        }
-        if (!c.startsWith('{'))
-            currentIndex += nextLineIndents;
+        if (!isTag) {
+            if (currentIndex > 0 && startBlocks > 0 && endBlocks > 0) {
+                // Note: "} else {", "} else if () {"
+                // Indent one step lower
+                currentIndex--;
+            } else if (endBrackets > startBrackets) {
+                // Note: "variable)"
+                // Indent one step higher
+                currentIndex++;
+            }
+            if (!c.startsWith('{'))
+                currentIndex += nextLineIndents;
 
-        if (!c.isEmpty() && startBlocks == 0 && endBlocks == 0 && indexChange == 0 && !c.endsWith(';') && !c.endsWith(',') && !c.endsWith('(') && !c.endsWith("*/")) {
-            // Note: "if ()", "else if ()", "else", "for (..)"
-            // Something that should continue to next line
-            nextLineIndents++;
-        } else if (nextLineIndents > 0) {
-            // Return to indent before e.g. "if (thing) \n if (thing2) \n something;"
-            nextLineIndents = indentBeforeSingles;
-            indentBeforeSingles = nextLineIndents;
+            if (!c.isEmpty() && startBlocks == 0 && endBlocks == 0 && indexChange == 0 && !c.endsWith(';') && !c.endsWith(',') && !c.endsWith('(') && !c.endsWith("*/")) {
+                // Note: "if ()", "else if ()", "else", "for (..)"
+                // Something that should continue to next line
+                nextLineIndents++;
+            } else if (nextLineIndents > 0) {
+                // Return to indent before e.g. "if (thing) \n if (thing2) \n something;"
+                nextLineIndents = indentBeforeSingles;
+                indentBeforeSingles = nextLineIndents;
+            }
         }
 
         // Apply indent
@@ -225,6 +229,7 @@ QString CodeHelper::autoIndentGLSLNextLine(const QString &codeLine, bool multili
 
     QString c = codeLine.trimmed();
     bool isPreprocessor = c.startsWith('#');
+    bool isTag = c.startsWith('@');
 
     // Remove content after "//"
     int lineCommentIndex = c.indexOf("//");
@@ -233,7 +238,7 @@ QString CodeHelper::autoIndentGLSLNextLine(const QString &codeLine, bool multili
         c = c.trimmed();
     }
 
-    if (!c.isEmpty() && !isPreprocessor && !multilineComment) {
+    if (!c.isEmpty() && !isPreprocessor && !isTag && !multilineComment) {
         // Check indent for next line
         int index = 0;
         int indexChange = 0;
@@ -281,11 +286,11 @@ QString CodeHelper::getCurrentWord(QQuickTextEdit *textEdit)
         cPos--;
         c = textEdit->getText(cPos, cPos + 1).front();
     }
-    // Special case of "//" tags
-    if (cPos >= 2) {
-        QString s = textEdit->getText(cPos - 1, cPos + 1);
-        if (s == QStringLiteral("//"))
-            currentWord.prepend(QStringLiteral("//"));
+    // Special case of "@" tags
+    if (cPos >= 1) {
+        QString s = textEdit->getText(cPos, cPos + 1);
+        if (s == QStringLiteral("@"))
+            currentWord.prepend(QStringLiteral("@"));
     }
     cPos = cursorPosition;
     c = textEdit->getText(cPos, cPos + 1).front();
@@ -297,7 +302,7 @@ QString CodeHelper::getCurrentWord(QQuickTextEdit *textEdit)
     return currentWord;
 }
 
-// Remove the current work under cursor
+// Remove the current word under cursor
 void CodeHelper::removeCurrentWord(QQuickTextEdit *textEdit)
 {
     if (!textEdit)
@@ -312,11 +317,11 @@ void CodeHelper::removeCurrentWord(QQuickTextEdit *textEdit)
         cPos--;
         c = textEdit->getText(cPos, cPos + 1).front();
     }
-    // Special case of "//" tags
-    if (cPos >= 2) {
-        QString s = textEdit->getText(cPos - 1, cPos + 1);
-        if (s == QStringLiteral("//"))
-            cPos -= 2;
+    // Special case of "@" tags
+    if (cPos >= 1) {
+        QString s = textEdit->getText(cPos, cPos + 1);
+        if (s == QStringLiteral("@"))
+            cPos--;
     }
     firstPos = cPos + 1;
     cPos = cursorPosition;
@@ -385,12 +390,13 @@ void CodeHelper::showCodeCompletion()
             if (a.startsWith(currentWordCleaned, Qt::CaseInsensitive) && a.size() > currentWordCleaned.size())
                 m_codeCompletionModel->addItem(a, CodeCompletionModel::TypeFunction);
         }
+
+        for (const auto &a : m_reservedTagNames) {
+            if (a.startsWith(currentWord, Qt::CaseInsensitive) && a.size() > currentWord.size())
+                m_codeCompletionModel->addItem(a, CodeCompletionModel::TypeTag);
+        }
     }
 
-    for (const auto &a : m_reservedTagNames) {
-        if (a.startsWith(currentWord, Qt::CaseInsensitive) && a.size() > currentWord.size())
-            m_codeCompletionModel->addItem(a, CodeCompletionModel::TypeTag);
-    }
     m_codeCompletionModel->endResetModel();
 
     if (!m_codeCompletionModel->m_modelList.isEmpty()) {

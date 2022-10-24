@@ -3,7 +3,7 @@
         "description": "Renders a two coloured sunburst effect with adjustable colors, stripe count, angle, center point, center ring and smoothness",
         "fragmentCode": [
             "#define TAU 6.28318530718",
-            "//main",
+            "@main",
             "{",
             "    const vec2 d = texCoord - sunburstCenterPoint;",
             "    const float a = atan(d.y, d.x)  / TAU + sunburstAngle;",

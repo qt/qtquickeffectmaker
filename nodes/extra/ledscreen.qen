@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Creates ledscreen effect of the source item. Note: Uses source item texture so this node should be used in the beginning of node tree and nodes with color operations applied after it.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    const float maxLedSize = ledScreenLedSize;",
             "    vec2 center = floor(fragCoord / maxLedSize) * maxLedSize + maxLedSize * 0.5;",

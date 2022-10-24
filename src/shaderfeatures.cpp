@@ -50,9 +50,9 @@ void ShaderFeatures::checkLine(const QString &line, Features &features) {
     if (line.contains("fragCoord"))
         features.setFlag(FragCoord, true);
 
-    if (line.contains("//mesh")) {
-        // Get the mesh size, remove "//mesh"
-        QString l = line.trimmed().sliced(6);
+    if (line.contains("@mesh")) {
+        // Get the mesh size, remove "@mesh"
+        QString l = line.trimmed().sliced(5);
         QStringList list = l.split(QLatin1Char(','));
         if (list.size() >= 2) {
             int w = list.at(0).trimmed().toInt();
@@ -65,6 +65,6 @@ void ShaderFeatures::checkLine(const QString &line, Features &features) {
         if (m_gridMeshWidth > 1 || m_gridMeshHeight > 1)
             features.setFlag(GridMesh, true);
     }
-    if (line.contains("//blursources"))
+    if (line.contains("@blursources"))
         features.setFlag(BlurSources, true);
 }

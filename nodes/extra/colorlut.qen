@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Applies a color lookup table for the source item. The format of the LUT image is either 16x16x16x16 square in 256x256 (default) or 64x64x64 square in 512x512. The 256 version is more performant and requires only a single texture lookup.\n\nSeveral built-in LUTs are provided in both formats. To create a custom LUT, use the lut_*_neutral as the base.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    const vec4 currentColor = fragColor;",
             "",

@@ -190,7 +190,8 @@ private:
         ErrorQMLParsing,
         ErrorVert,
         ErrorFrag,
-        ErrorQMLRuntime
+        ErrorQMLRuntime,
+        ErrorPreprocessor
     };
 
     const QString getBufUniform();
@@ -207,6 +208,9 @@ private:
     QString processVertexRootLine(const QString &line);
     QString processFragmentRootLine(const QString &line);
     QString getCustomShaderVaryings(bool outState);
+    QStringList removeTagsFromCode(const QStringList &codeLines);
+    QString removeTagsFromCode(const QString &code);
+    QString replaceOldTagsWithNew(const QString &code);
 
     void doBakeShaders();
     QFile resolveFileFromUrl(const QUrl &fileUrl);

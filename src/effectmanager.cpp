@@ -3,6 +3,7 @@
 
 #include "effectmanager.h"
 #include "propertyhandler.h"
+#include "syntaxhighlighterdata.h"
 #include <QDir>
 #include <QFile>
 #include <QJsonDocument>
@@ -220,7 +221,7 @@ QStringList EffectManager::getDefaultRootVertexShader()
         m_defaultRootVertexShader << "    texCoord = qt_MultiTexCoord0;";
         m_defaultRootVertexShader << "    fragCoord = qt_Vertex.xy;";
         m_defaultRootVertexShader << "    vec2 vertCoord = qt_Vertex.xy;";
-        m_defaultRootVertexShader << "    //nodes";
+        m_defaultRootVertexShader << "    @nodes";
         m_defaultRootVertexShader << "    gl_Position = qt_Matrix * vec4(vertCoord, 0.0, 1.0);";
         m_defaultRootVertexShader << "}";
     }
@@ -232,7 +233,7 @@ QStringList EffectManager::getDefaultRootFragmentShader()
     if (m_defaultRootFragmentShader.isEmpty()) {
         m_defaultRootFragmentShader << "void main() {";
         m_defaultRootFragmentShader << "    fragColor = texture(iSource, texCoord);";
-        m_defaultRootFragmentShader << "    //nodes";
+        m_defaultRootFragmentShader << "    @nodes";
         m_defaultRootFragmentShader << "    fragColor = fragColor * qt_Opacity;";
         m_defaultRootFragmentShader << "}";
     }
@@ -280,11 +281,47 @@ QString EffectManager::getCustomShaderVaryings(bool outState)
     return output;
 }
 
+// Remove all post-processing tags ("@tag") from the code.
+// Except "@nodes" tag as that is handled later.
+QStringList EffectManager::removeTagsFromCode(const QStringList &codeLines) {
+    QStringList s;
+    for (const auto &line : codeLines) {
+        const auto trimmedLine = line.trimmed();
+        if (!trimmedLine.startsWith('@') || trimmedLine.startsWith("@nodes")) {
+            s << line;
+        } else {
+            // Check if the tag is known
+            bool validTag = false;
+            auto tags = SyntaxHighlighterData::reservedTagNames();
+            static QRegularExpression spaceReg("\\s+");
+            QString firstWord = trimmedLine.split(spaceReg, Qt::SkipEmptyParts).first();
+            for (const auto &tag : tags) {
+                if (firstWord == QString::fromUtf8(tag)) {
+                    validTag = true;
+                    break;
+                }
+            }
+            if (!validTag)
+                setEffectError(QString("Unknown tag: %1").arg(trimmedLine), ErrorPreprocessor);
+        }
+    }
+    return s;
+}
+
+QString EffectManager::removeTagsFromCode(const QString &code) {
+    QStringList codeLines = removeTagsFromCode(code.split('\n'));
+    return codeLines.join('\n');
+}
+
+
 QString EffectManager::generateVertexShader(bool includeUniforms) {
     QString s;
 
     if (includeUniforms)
         s += getVSUniforms();
+
+    // Remove tags when not generating for features check
+    const bool removeTags = includeUniforms;
 
     s += getDefineProperties();
     s += getConstVariables();
@@ -302,7 +339,7 @@ QString EffectManager::generateVertexShader(bool includeUniforms) {
                     s_sourceCode = n->vertexCode.split('\n');
                 } else if (n->type == 2) {
                     QStringList vertexCode = n->vertexCode.split('\n');
-                    int mainIndex = getTagIndex(vertexCode, QStringLiteral("//main"));
+                    int mainIndex = getTagIndex(vertexCode, QStringLiteral("main"));
                     int line = 0;
                     for (const auto &ss : vertexCode) {
                         if (mainIndex == -1 || line > mainIndex)
@@ -316,15 +353,21 @@ QString EffectManager::generateVertexShader(bool includeUniforms) {
         }
     }
 
-    s += getCustomShaderVaryings(true);
-    s += s_root + '\n';
-
     if (s_sourceCode.isEmpty()) {
         // If source nodes doesn't contain any code, fail to the default one
         s_sourceCode << getDefaultRootVertexShader();
     }
 
-    int nodesIndex = getTagIndex(s_sourceCode, QStringLiteral("//nodes"));
+    if (removeTags) {
+        s_sourceCode = removeTagsFromCode(s_sourceCode);
+        s_root = removeTagsFromCode(s_root);
+        s_main = removeTagsFromCode(s_main);
+    }
+
+    s += getCustomShaderVaryings(true);
+    s += s_root + '\n';
+
+    int nodesIndex = getTagIndex(s_sourceCode, QStringLiteral("nodes"));
     int line = 0;
     for (const auto &ss : s_sourceCode) {
         if (line == nodesIndex)
@@ -343,6 +386,9 @@ QString EffectManager::generateFragmentShader(bool includeUniforms) {
     if (includeUniforms)
         s += getFSUniforms();
 
+    // Remove tags when not generating for features check
+    const bool removeTags = includeUniforms;
+
     s += getDefineProperties();
     s += getConstVariables();
 
@@ -358,7 +404,7 @@ QString EffectManager::generateFragmentShader(bool includeUniforms) {
                     s_sourceCode = n->fragmentCode.split('\n');
                 } else if (n->type == 2) {
                     QStringList fragmentCode = n->fragmentCode.split('\n');
-                    int mainIndex = getTagIndex(fragmentCode, QStringLiteral("//main"));
+                    int mainIndex = getTagIndex(fragmentCode, QStringLiteral("main"));
                     int line = 0;
                     for (const auto &ss : fragmentCode) {
                         if (mainIndex == -1 || line > mainIndex)
@@ -372,16 +418,21 @@ QString EffectManager::generateFragmentShader(bool includeUniforms) {
         }
     }
 
-    s += getCustomShaderVaryings(false);
-
-    s += s_root + '\n';
-
     if (s_sourceCode.isEmpty()) {
         // If source nodes doesn't contain any code, fail to the default one
         s_sourceCode << getDefaultRootFragmentShader();
     }
 
-    int nodesIndex = getTagIndex(s_sourceCode, QStringLiteral("//nodes"));
+    if (removeTags) {
+        s_sourceCode = removeTagsFromCode(s_sourceCode);
+        s_root = removeTagsFromCode(s_root);
+        s_main = removeTagsFromCode(s_main);
+    }
+
+    s += getCustomShaderVaryings(false);
+    s += s_root + '\n';
+
+    int nodesIndex = getTagIndex(s_sourceCode, QStringLiteral("nodes"));
     int line = 0;
     for (const auto &ss : s_sourceCode) {
         if (line == nodesIndex)
@@ -398,6 +449,7 @@ int EffectManager::getTagIndex(const QStringList &code, const QString &tag)
 {
     int index = -1;
     int line = 0;
+    const QString tagString = QString("@%1").arg(tag);
     for (const auto &s : code) {
         auto st = s.trimmed();
         // Check if line or first non-space content of the line matches to tag
@@ -406,7 +458,7 @@ int EffectManager::getTagIndex(const QStringList &code, const QString &tag)
         QString firstWord = st;
         if (firstSpace > 0)
             firstWord = st.sliced(0, firstSpace);
-        if (firstWord == tag) {
+        if (firstWord == tagString) {
             index = line;
             break;
         }
@@ -436,6 +488,7 @@ void EffectManager::updateBakedShaderVersions()
 // When forced is true, will bake even when autoplay is off
 void EffectManager::bakeShaders(bool forced)
 {
+    resetEffectError(ErrorPreprocessor);
     if (m_vertexShader == generateVertexShader()
             && m_fragmentShader == generateFragmentShader()) {
         setShadersUpToDate(true);
@@ -1396,6 +1449,15 @@ void EffectManager::cleanupProject()
     setEffectPadding(QRect(0, 0, 0, 0));
 }
 
+QString EffectManager::replaceOldTagsWithNew(const QString &code) {
+    QString s = code;
+    s = s.replace("//main", "@main");
+    s = s.replace("//nodes", "@nodes");
+    s = s.replace("//mesh", "@mesh");
+    s = s.replace("//blursources", "@blursources");
+    return s;
+}
+
 bool EffectManager::loadProject(const QUrl &filename)
 {
     auto loadFile = resolveFileFromUrl(filename);
@@ -1534,6 +1596,20 @@ bool EffectManager::loadProject(const QUrl &filename)
             addNodeConnection(fromId, toId);
         }
     }
+
+    // Replace old tags ("//nodes") with new format ("@nodes")
+    // Note: To-be-removed in near future
+    m_nodeView->m_nodesModel->beginResetModel();
+    for (auto &node : m_nodeView->m_nodesModel->m_nodesList) {
+        node.vertexCode = replaceOldTagsWithNew(node.vertexCode);
+        node.fragmentCode = replaceOldTagsWithNew(node.fragmentCode);
+        if (node.selected) {
+            Q_EMIT m_nodeView->selectedNodeVertexCodeChanged();
+            Q_EMIT m_nodeView->selectedNodeFragmentCodeChanged();
+        }
+    }
+    m_nodeView->m_nodesModel->endResetModel();
+    // End of to-be-removed.
 
     m_nodeView->updateActiveNodesList();
     // Layout nodes automatically to suit current view size

@@ -1,7 +1,7 @@
 {
     "QEN": {
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    float time = iTime * 0.2;",
             "    vec2 a = vec2(iResolution.x / iResolution.y, 1.0);",

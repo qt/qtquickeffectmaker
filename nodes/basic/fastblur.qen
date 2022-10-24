@@ -2,7 +2,7 @@
     "QEN": {
         "description": "The FastBlur effect softens the source content by blurring it with algorithm which uses the source content downscaling and bilinear filtering.\n\nNote: Requires BlurHelper node.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    vec4 blurredColor = texture(iSourceBlur1, texCoord) * blurWeight1[0];",
             "    blurredColor += texture(iSourceBlur2, texCoord) * blurWeight1[1];",
@@ -42,7 +42,7 @@
             "    return max(0.0, min(1.0, 1.0 - v * 2.0));",
             "}",
             "",
-            "//main",
+            "@main",
             "{",
             "    float blurLod = sqrt(fastBlurAmount * (BLUR_HELPER_MAX_LEVEL / 64.0)) * 1.2 - 0.2;",
             "    float bw1 = blurWeight(abs(blurLod - 0.1));",

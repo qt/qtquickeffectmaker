@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Generates snowing effect.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    float snowing = 0.0;",
             "    float time = iTime * 0.8;",

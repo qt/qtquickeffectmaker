@@ -2,7 +2,7 @@
     "QEN": {
         "description": "This effect adjusts the source item colors. Brightness adjustment changes the perceived luminance of the source item. Contrast adjustment increases or decreases the color and brightness variations.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    fragColor.rgb /= max(1.0/256.0, fragColor.a);",
             "    float c = 1.0 + brightnessContrastContrast;",

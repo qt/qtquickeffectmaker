@@ -20,7 +20,7 @@
             "    return smoothstep(d, 0.0, abs(w - p.x));",
             "}",
             "",
-            "//main",
+            "@main",
             "{",
             "    vec2 uv = 2.0 * texCoord - 1.0;",
             "    uv.y = 1.0 - uv.y;",

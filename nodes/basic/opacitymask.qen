@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Masks the source item with another item.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    float opacityMaskAmount = texture(opacityMaskSource, texCoord).a;",
             "    opacityMaskAmount = opacityMaskInvert ? 1.0 - opacityMaskAmount : opacityMaskAmount;",

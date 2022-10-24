@@ -34,9 +34,9 @@
         ],
         "version": 1,
         "vertexCode": [
-            "//mesh 100, 100",
+            "@mesh 100, 100",
             "#define TAU 6.28318530718",
-            "//main",
+            "@main",
             "{",
             "    const vec2 cp = iResolution.xy * swirlCenterPoint;",
             "    const vec2 d = vertCoord - cp;",

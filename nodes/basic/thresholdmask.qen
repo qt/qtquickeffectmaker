@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Masks the source item with another item and applies threshold values.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    vec4 maskTexture = texture(thresholdMaskSource, texCoord);",
             "    float alphaMask = maskTexture.a;",

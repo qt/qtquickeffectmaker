@@ -2,7 +2,7 @@
     "QEN": {
         "description": "This effect creats a wavy sea with reflection of the source item. Requires texture lookup of the source, so should be used among first nodes.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    vec2 tc = vec2(texCoord.s, 1. - texCoord.t);",
             "",

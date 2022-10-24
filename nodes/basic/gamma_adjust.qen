@@ -2,7 +2,7 @@
     "QEN": {
         "description": "GammaAdjust is applied to each pixel according to the curve which is pre-defined as a power-law expression, where the property gamma is used as the reciprocal scaling exponent.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    fragColor.rgb = fragColor.rgb / max(1.0 / 256.0, fragColor.a);",
             "    float realGamma = 1.0 / max(gammaAdjustAmount, 0.0001);",

@@ -2,7 +2,7 @@
     "QEN": {
         "description": "Bends the source item around a ring and applies some dimming to bent parts.",
         "fragmentCode": [
-            "//main",
+            "@main",
             "{",
             "    vec4 color = mix(fragColor * bendHighlightFactor, bendDimColor * fragColor.a, dim);",
             "    fragColor = color;",
@@ -59,13 +59,13 @@
         ],
         "version": 1,
         "vertexCode": [
-            "//mesh 50,50",
+            "@mesh 50,50",
             "",
             "out float dim;",
             "",
             "#define PI 3.1415926538",
             "",
-            "//main",
+            "@main",
             "{",
             "    const float a = (texCoord.x + 1.) * PI;",
             "    const float dx = 0.5 + 0.5 * cos(a);",

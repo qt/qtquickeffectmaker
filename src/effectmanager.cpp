@@ -1049,6 +1049,27 @@ void EffectManager::initialize()
     m_nodeView->m_initialized = true;
 }
 
+// Detects common GLSL error messages and returns potential
+// additional error information related to them.
+QString EffectManager::detectErrorMessage(const QString &errorMessage)
+{
+    QHash<QString, QString> nodeErrors {
+        { "'BLUR_HELPER_MAX_LEVEL' : undeclared identifier", "BlurHelper"},
+        { "'hash23' : no matching overloaded function found", "NoiseHelper" },
+        { "'HASH_BOX_SIZE' : undeclared identifier", "NoiseHelper" },
+        { "'pseudo3dNoise' : no matching overloaded function found", "NoiseHelper" }
+    };
+
+    QString missingNodeError = QStringLiteral("Are you missing a %1 node?\n");
+    QHash<QString, QString>::const_iterator i = nodeErrors.constBegin();
+    while (i != nodeErrors.constEnd()) {
+        if (errorMessage.contains(i.key()))
+            return missingNodeError.arg(i.value());
+        ++i;
+    }
+    return QString();
+}
+
 // Return first error message (if any)
 EffectError EffectManager::effectError() const
 {
@@ -1085,7 +1106,8 @@ void EffectManager::setEffectError(const QString &errorMessage, int type, int li
         error.m_line = lineNumber;
     }
 
-    error.m_message = errorMessage;
+    QString additionalErrorInfo = detectErrorMessage(errorMessage);
+    error.m_message = additionalErrorInfo + errorMessage;
     m_effectErrors.insert(type, error);
     Q_EMIT effectErrorChanged();
 }

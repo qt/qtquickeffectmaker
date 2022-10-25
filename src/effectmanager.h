@@ -211,6 +211,7 @@ private:
     QStringList removeTagsFromCode(const QStringList &codeLines);
     QString removeTagsFromCode(const QString &code);
     QString replaceOldTagsWithNew(const QString &code);
+    QString detectErrorMessage(const QString &errorMessage);
 
     void doBakeShaders();
     QFile resolveFileFromUrl(const QUrl &fileUrl);

@@ -2,6 +2,7 @@
     "QEN": {
         "description": "Generates electric clouds type of effect for the source item.",
         "fragmentCode": [
+            "@requires NoiseHelper",
             "@main",
             "{",
             "    vec2 uv = fragCoord.xy / iResolution.y;",

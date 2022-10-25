@@ -145,6 +145,7 @@ set(qml_resource_files
     "qml/images/icon_layout_nodes.png"
     "qml/images/icon_pause.png"
     "qml/images/icon_play.png"
+    "qml/images/icon_requires.png"
     "qml/images/icon_remove_shadow.png"
     "qml/images/icon_reset.png"
     "qml/images/icon_restart.png"

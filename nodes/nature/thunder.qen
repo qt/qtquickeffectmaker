@@ -2,6 +2,7 @@
     "QEN": {
         "description": "This is an empty node for creating custom effects.",
         "fragmentCode": [
+            "@requires NoiseHelper",
             "// Renders a thunder strike line",
             "float renderThunderStrike(vec2 p, float d)",
             "{",

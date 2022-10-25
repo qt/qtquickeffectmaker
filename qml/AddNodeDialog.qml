@@ -12,6 +12,7 @@ CustomPopup {
     property string selectedNodeFile
     property string selectedNodeName
     property string selectedNodeDescription
+    property string selectedNodeRequires
     property var selectedNodeProperties: []
     property bool selectedNodeCanBeAdded: true
 
@@ -23,6 +24,7 @@ CustomPopup {
         selectedNodeFile = "";
         selectedNodeName = "";
         selectedNodeDescription = "";
+        selectedNodeRequires = "";
         selectedNodeProperties = [];
         selectedNodeCanBeAdded = true;
     }
@@ -137,12 +139,36 @@ CustomPopup {
                     font.pixelSize: 14
                     elide: Text.ElideRight
                 }
+                Image {
+                    anchors.right: parent.right
+                    anchors.rightMargin: 5
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height * 0.4
+                    width: height
+                    source: "images/icon_requires.png"
+                    mipmap: true
+                    visible: model.requires !== ""
+                    opacity: 0.2
+                    MouseArea {
+                        id: requiresIconMouseArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                    }
+                    ToolTip {
+                        parent: parent
+                        visible: requiresIconMouseArea.containsMouse
+                        delay: 1000
+                        text: "Requires: " + model.requires
+                    }
+                }
+
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
                         selectedNodeName = model.name;
                         selectedNodeFile = model.file;
                         selectedNodeDescription = model.description;
+                        selectedNodeRequires = model.requires;
                         selectedNodeProperties = model.properties;
                         selectedNodeCanBeAdded = model.canBeAdded;
                     }
@@ -177,6 +203,15 @@ CustomPopup {
                         font.pixelSize: 14
                         color: mainView.foregroundColor2
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    }
+                    Text {
+                        width: parent.width
+                        text: "Requires: " + selectedNodeRequires
+                        font.pixelSize: 14
+                        font.bold: true
+                        color: mainView.foregroundColor2
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        visible: selectedNodeRequires !== ""
                     }
                     Column {
                         width: parent.width

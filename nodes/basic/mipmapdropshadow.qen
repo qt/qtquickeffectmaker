@@ -2,6 +2,7 @@
     "QEN": {
         "description": "This node creates a medium quality but fast drop shadow of the source item. It uses mipmap levels and does not require BlurHelper node.",
         "fragmentCode": [
+            "@requires NoiseHelper",
             "@main",
             "{",
             "    const vec2 uv = texCoord + (1.0 - mipmapDropShadowScale) * (texCoord - 1.0);",

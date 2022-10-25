@@ -31,6 +31,8 @@ Tags are special commands which are looked for from the shader sources. Format o
 <tr>
 <td><b>@main</b></td><td>This tag can be used in both vertex and fragment shaders to separate code which belongs into root and inside main() method. If the tag is missing, all code goes into main.</td>
 </tr><tr>
+<td><b>@requires [name]</b></td><td>This tag is used to inform that the node depends on other node called [name]. This dependency is not enforced, it is used just to inform the users.</td>
+</tr><tr>
 <td><b>@nodes</b></td><td>This tag is used in the main node vertex and fragment shaders. It will get replaced with the main shader code of the following nodes.</td>
 </tr><tr>
 <td><b>@mesh w, h</b></td><td>This optional tag is used in the vertex shaders to define GridMesh size. The default mesh size is (1, 1). If mesh tag is used multiple times (by different nodes), biggest values will be used. Example: "@mesh 20, 10" creates horizontally 20 and vertically 10 vertices grid mesh.</td>

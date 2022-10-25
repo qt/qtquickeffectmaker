@@ -2,6 +2,7 @@
     "QEN": {
         "description": "This node creates a medium quality but fast blur of the source item. Suitable when speed is more important than output quality. It uses mipmap levels and does not require BlurHelper node.",
         "fragmentCode": [
+            "@requires NoiseHelper",
             "@main",
             "{",
             "    const float lod = sqrt(mipmapBlurAmount);",

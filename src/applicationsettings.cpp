@@ -132,16 +132,7 @@ ApplicationSettings::ApplicationSettings(QObject *parent)
     m_backgroundImagesModel = new ImagesModel(m_effectManager);
     m_recentProjectsModel = new MenusModel(m_effectManager);
 
-    // Add default Sources
-    for (const auto &source : defaultSources) {
-        QString absolutePath = m_effectManager->relativeToAbsolutePath(source, QStringLiteral(QQEM_DATA_PATH));
-        addSourceImage(absolutePath, false);
-    }
-
-    // Add custom sources from settings
-    QStringList customSources = m_settings.value(KEY_CUSTOM_SOURCE_IMAGES).value<QStringList>();
-    for (const auto &source : customSources)
-        addSourceImage(source, true);
+    refreshSourceImagesModel();
 
     // Add default backgrounds
     for (const auto &source : defaultBackgrounds) {
@@ -151,7 +142,33 @@ ApplicationSettings::ApplicationSettings(QObject *parent)
     }
 }
 
-bool ApplicationSettings::addSourceImage(const QString &sourceImage, bool canRemove)
+// Refresh the source images list
+void ApplicationSettings::refreshSourceImagesModel()
+{
+    QStringList customSources = m_settings.value(KEY_CUSTOM_SOURCE_IMAGES).value<QStringList>();
+    // Remove custom images that don't exist from settings
+    for (const auto &source : customSources) {
+        QUrl url(source);
+        QString sourceImageFile = url.toLocalFile();
+        if (!QFile::exists(sourceImageFile))
+            removeSourceImageFromSettings(source);
+    }
+
+    m_sourceImagesModel->m_modelList.clear();
+
+    // Add default Sources
+    for (const auto &source : defaultSources) {
+        QString absolutePath = m_effectManager->relativeToAbsolutePath(source, QStringLiteral(QQEM_DATA_PATH));
+        addSourceImage(absolutePath, false, false);
+    }
+
+    // Add custom sources from settings
+    customSources = m_settings.value(KEY_CUSTOM_SOURCE_IMAGES).value<QStringList>();
+    for (const auto &source : customSources)
+        addSourceImage(source, true, false);
+}
+
+bool ApplicationSettings::addSourceImage(const QString &sourceImage, bool canRemove, bool updateSettings)
 {
     if (sourceImage.isEmpty())
         return false;
@@ -169,10 +186,12 @@ bool ApplicationSettings::addSourceImage(const QString &sourceImage, bool canRem
     QString sourceImageFile = url.toLocalFile();
     QImageReader imageReader(sourceImageFile);
     QSize imageSize(0, 0);
-    if (imageReader.canRead())
+    if (imageReader.canRead()) {
         imageSize = imageReader.size();
-    else
+    } else {
         qWarning("Can't read image: %s", qPrintable(sourceImage));
+        return false;
+    }
 
     m_sourceImagesModel->beginResetModel();
     ImagesModel::ImagesData d;
@@ -183,7 +202,7 @@ bool ApplicationSettings::addSourceImage(const QString &sourceImage, bool canRem
     m_sourceImagesModel->m_modelList.append(d);
     m_sourceImagesModel->endResetModel();
 
-    if (canRemove) {
+    if (updateSettings && canRemove) {
         // Non-default images are added also into settings
         QStringList customSources = m_settings.value(KEY_CUSTOM_SOURCE_IMAGES).value<QStringList>();
         if (!customSources.contains(d.file)) {
@@ -194,6 +213,28 @@ bool ApplicationSettings::addSourceImage(const QString &sourceImage, bool canRem
     return true;
 }
 
+// Removes sourceImage from the QSettings
+bool ApplicationSettings::removeSourceImageFromSettings(const QString &sourceImage)
+{
+    QStringList customSources = m_settings.value(KEY_CUSTOM_SOURCE_IMAGES).value<QStringList>();
+    if (customSources.contains(sourceImage)) {
+        customSources.removeAll(sourceImage);
+        m_settings.setValue(KEY_CUSTOM_SOURCE_IMAGES, customSources);
+        return true;
+    }
+    return false;
+}
+
+// Removes sourceImage from the model
+bool ApplicationSettings::removeSourceImage(const QString &sourceImage)
+{
+    for (int i = 0; i < m_sourceImagesModel->m_modelList.size(); i++) {
+        const auto &d = m_sourceImagesModel->m_modelList.at(i);
+        if (d.file == sourceImage)
+            return removeSourceImage(i);
+    }
+    return false;
+}
 bool ApplicationSettings::removeSourceImage(int index)
 {
     if (index < 0 || index >= m_sourceImagesModel->m_modelList.size())
@@ -203,9 +244,11 @@ bool ApplicationSettings::removeSourceImage(int index)
     m_sourceImagesModel->m_modelList.removeAt(index);
     m_sourceImagesModel->endResetModel();
 
-    QStringList customSources = m_settings.value(KEY_CUSTOM_SOURCE_IMAGES).value<QStringList>();
-    customSources.removeAt(index - defaultSources.size());
-    m_settings.setValue(KEY_CUSTOM_SOURCE_IMAGES, customSources);
+    if (index >= defaultSources.size()) {
+        QStringList customSources = m_settings.value(KEY_CUSTOM_SOURCE_IMAGES).value<QStringList>();
+        customSources.removeAt(index - defaultSources.size());
+        m_settings.setValue(KEY_CUSTOM_SOURCE_IMAGES, customSources);
+    }
 
     return true;
 }

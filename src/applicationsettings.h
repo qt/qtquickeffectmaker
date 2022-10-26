@@ -108,7 +108,10 @@ public:
     int codeFontSize() const;
 
 public Q_SLOTS:
-    bool addSourceImage(const QString &sourceImage, bool canRemove = true);
+    void refreshSourceImagesModel();
+    bool addSourceImage(const QString &sourceImage, bool canRemove = true, bool updateSettings = true);
+    bool removeSourceImageFromSettings(const QString &sourceImage);
+    bool removeSourceImage(const QString &sourceImage);
     bool removeSourceImage(int index);
     void updateRecentProjectsModel(const QString &projectName = QString(), const QString &projectFile = QString());
     void clearRecentProjectsModel();

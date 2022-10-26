@@ -53,6 +53,17 @@ CustomDialog {
             Button {
                 height: parent.height - 4
                 anchors.verticalCenter: parent.verticalCenter
+                anchors.right: addSourceImageButton.left
+                anchors.rightMargin: 5
+                text: qsTr("Refresh");
+                onClicked: {
+                    effectManager.settings.refreshSourceImagesModel();
+                }
+            }
+            Button {
+                id: addSourceImageButton
+                height: parent.height - 4
+                anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.right
                 text: qsTr("Add");
                 onClicked: {

@@ -1483,6 +1483,7 @@ QString EffectManager::replaceOldTagsWithNew(const QString &code) {
 bool EffectManager::loadProject(const QUrl &filename)
 {
     auto loadFile = resolveFileFromUrl(filename);
+    resetEffectError();
 
     if (!loadFile.open(QIODevice::ReadOnly)) {
         QString error = QString("Couldn't open project file: '%1'").arg(filename.toString());
@@ -1523,6 +1524,24 @@ bool EffectManager::loadProject(const QUrl &filename)
         setEffectError(error);
         m_settings->removeRecentProjectsModel(filename.toString());
         return false;
+    }
+
+    // Get the QQEM version this project was saved with.
+    // As a number, so we can use it for comparisons.
+    // Start with 0.4 as QQM 0.41 was the first version which started
+    // saving these version numbers.
+    double qqemVersion = 0.4;
+    if (json.contains("QQEM")) {
+        QString versionString = json["QQEM"].toString();
+        bool ok;
+        double versionNumber = versionString.toDouble(&ok);
+        if (ok) {
+            qqemVersion = versionNumber;
+        } else {
+            QString error = QString("Warning: Invalid QQEM version (%1)").arg(versionString);
+            qWarning() << qPrintable(error);
+            setEffectError(error);
+        }
     }
 
     // At this point we consider project to be OK, so start cleanup & load
@@ -1620,18 +1639,19 @@ bool EffectManager::loadProject(const QUrl &filename)
     }
 
     // Replace old tags ("//nodes") with new format ("@nodes")
-    // Note: To-be-removed in near future
-    m_nodeView->m_nodesModel->beginResetModel();
-    for (auto &node : m_nodeView->m_nodesModel->m_nodesList) {
-        node.vertexCode = replaceOldTagsWithNew(node.vertexCode);
-        node.fragmentCode = replaceOldTagsWithNew(node.fragmentCode);
-        if (node.selected) {
-            Q_EMIT m_nodeView->selectedNodeVertexCodeChanged();
-            Q_EMIT m_nodeView->selectedNodeFragmentCodeChanged();
+    // Projects saved with version <= 0.40 use the old tags format
+    if (qqemVersion <= 0.4) {
+        m_nodeView->m_nodesModel->beginResetModel();
+        for (auto &node : m_nodeView->m_nodesModel->m_nodesList) {
+            node.vertexCode = replaceOldTagsWithNew(node.vertexCode);
+            node.fragmentCode = replaceOldTagsWithNew(node.fragmentCode);
+            if (node.selected) {
+                Q_EMIT m_nodeView->selectedNodeVertexCodeChanged();
+                Q_EMIT m_nodeView->selectedNodeFragmentCodeChanged();
+            }
         }
+        m_nodeView->m_nodesModel->endResetModel();
     }
-    m_nodeView->m_nodesModel->endResetModel();
-    // End of to-be-removed.
 
     m_nodeView->updateActiveNodesList();
     // Layout nodes automatically to suit current view size
@@ -1669,7 +1689,10 @@ bool EffectManager::saveProject(const QUrl &filename)
     setProjectName(fi.baseName());
 
     QJsonObject json;
+    // File format version
     json.insert("version", 1);
+    // QQEM version
+    json.insert("QQEM", qApp->applicationVersion());
 
     // Add project settings
     QJsonObject settingsObject;
@@ -1880,6 +1903,7 @@ bool EffectManager::newProject(const QString &filepath, const QString &filename,
     }
 
     if (clearNodeView) {
+        resetEffectError();
         cleanupProject();
         cleanupNodeView(true);
     }

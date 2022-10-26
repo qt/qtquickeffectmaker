@@ -17,7 +17,7 @@
 #include <Windows.h>
 #endif
 
-#define APP_VERSION_STR "0.40"
+#define APP_VERSION_STR "0.41"
 
 int main(int argc, char *argv[])
 {

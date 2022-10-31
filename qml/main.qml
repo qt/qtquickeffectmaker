@@ -331,8 +331,6 @@ ApplicationWindow {
     }
     ApplicationSettingsDialog {
         id: applicationSettingsDialog
-        parent: Overlay.overlay
-        anchors.centerIn: parent
     }
     QsbInspectorDialog {
         id: qsbInspectorDialog
@@ -500,7 +498,7 @@ ApplicationWindow {
     }
 
     function applicationSettingsAction() {
-        applicationSettingsDialog.open();
+        applicationSettingsDialog.show();
     }
 
     function qsbInspectorAction(qsbFile) {

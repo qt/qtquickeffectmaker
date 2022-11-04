@@ -2099,10 +2099,8 @@ bool EffectManager::exportEffect(const QString &dirPath, const QString &filename
         stream.writeStartElement("RCC");
         stream.writeStartElement("qresource");
         stream.writeAttribute("prefix", "/");
-        if (exportFlags & Images) {
-            for (const auto &filename : exportedFilenames)
-                stream.writeTextElement("file", filename);
-        }
+        for (const auto &filename : exportedFilenames)
+            stream.writeTextElement("file", filename);
         stream.writeEndElement(); // qresource
         stream.writeEndElement(); // RCC
         writeToFile(qrcXmlString.toUtf8(), qrcFilePath, FileType::Text);

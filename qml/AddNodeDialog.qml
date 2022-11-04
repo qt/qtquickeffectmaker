@@ -17,6 +17,8 @@ CustomPopup {
     property bool selectedNodeCanBeAdded: true
 
     property real showHideAnimationSpeed: 400
+    // All currently open node groups
+    property var openGroups: []
 
     function reset() {
         startNodeId = -1;
@@ -56,7 +58,7 @@ CustomPopup {
             id: sectionHeading
             Item {
                 required property string section
-                property bool show: false
+                readonly property bool show: openGroups.includes(section)
                 width: effectsListView.width - scrollBar.width - 5
                 height: 40
                 Rectangle {
@@ -91,7 +93,15 @@ CustomPopup {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        show = !show;
+                        // Show/hide the group
+                        const index = openGroups.indexOf(section);
+                        if (index > -1)
+                            openGroups.splice(index, 1);
+                        else
+                            openGroups.push(section);
+                        // Triggering manually required for array properties
+                        // so 'show' is updated.
+                        openGroupsChanged();
                         effectManager.showHideAddNodeGroup(parent.section, show);
                     }
                 }

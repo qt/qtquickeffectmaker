@@ -12,10 +12,10 @@ layout(std140, binding = 0) uniform buf {
     vec2 offset;
 };
 
-layout(binding = 1) uniform sampler2D source;
+layout(binding = 1) uniform sampler2D src;
 
 void main() {
-    vec4 sourceColor = (texture(source, texCoord0) + texture(source, texCoord1) +
-                        texture(source, texCoord2) + texture(source, texCoord3)) * 0.25;
+    vec4 sourceColor = (texture(src, texCoord0) + texture(src, texCoord1) +
+                        texture(src, texCoord2) + texture(src, texCoord3)) * 0.25;
     fragColor = sourceColor * qt_Opacity;
 }

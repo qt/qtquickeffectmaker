@@ -628,7 +628,8 @@ const QString EffectManager::getFSUniforms()
     }
     s += '\n';
     if (m_shaderFeatures.enabled(ShaderFeatures::BlurSources)) {
-        for (int i = 1; i <= 6; i++) {
+        const int blurItems = 5;
+        for (int i = 1; i <= blurItems; i++) {
             QString props = QString("layout(binding = %1) uniform sampler2D iSourceBlur%2")
                     .arg(bindingIndex).arg(QString::number(i));
             s += props + ";\n";
@@ -899,7 +900,6 @@ QString EffectManager::getQmlComponentString(bool localFiles)
         s += "        readonly property var iSourceBlur3: blurHelper.blurSrc3\n";
         s += "        readonly property var iSourceBlur4: blurHelper.blurSrc4\n";
         s += "        readonly property var iSourceBlur5: blurHelper.blurSrc5\n";
-        s += "        readonly property var iSourceBlur6: blurHelper.blurSrc6\n";
     }
     // When used in editor preview component, we need property with value
     // and when in exported component, property with binding to root value.

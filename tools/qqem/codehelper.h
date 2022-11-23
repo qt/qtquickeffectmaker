@@ -6,9 +6,9 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QtQuick/private/qquicktextedit_p_p.h>
 #include "codecompletionmodel.h"
 
-class QQuickTextEdit;
 class EffectManager;
 
 class CodeHelper : public QObject

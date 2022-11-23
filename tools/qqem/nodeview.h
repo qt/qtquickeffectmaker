@@ -32,7 +32,7 @@ class NodeView : public QQuickItem
     Q_PROPERTY(int codeSelectorIndex READ codeSelectorIndex NOTIFY codeSelectorIndexChanged)
     QML_NAMED_ELEMENT(NodeViewItem)
 public:
-    NodeView();
+    explicit NodeView(QQuickItem *parent = nullptr);
 
     NodesModel *nodesModel() const;
     ArrowsModel *arrowsModel() const;

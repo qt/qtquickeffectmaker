@@ -5,7 +5,6 @@
 #include "effectmanager.h"
 #include "syntaxhighlighterdata.h"
 #include <QString>
-#include <QtQuick/private/qquicktextedit_p_p.h>
 
 CodeHelper::CodeHelper(QObject *parent)
     : QObject{parent}

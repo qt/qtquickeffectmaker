@@ -6,12 +6,12 @@
 #include <QQmlContext>
 #include <QtCore/QCommandLineParser>
 #include <QDir>
-#include "src/effectmanager.h"
-#include "src/nodeview.h"
-#include "src/propertyhandler.h"
-#include "src/fpshelper.h"
-#include "src/syntaxhighlighter.h"
-#include "src/qsbinspectorhelper.h"
+#include "effectmanager.h"
+#include "nodeview.h"
+#include "propertyhandler.h"
+#include "fpshelper.h"
+#include "syntaxhighlighter.h"
+#include "qsbinspectorhelper.h"
 
 #ifdef _WIN32
 #include <Windows.h>

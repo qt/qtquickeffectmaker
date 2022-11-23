@@ -4,7 +4,8 @@
 #include "nodeview.h"
 #include "effectmanager.h"
 
-NodeView::NodeView()
+NodeView::NodeView(QQuickItem *parent)
+    : QQuickItem(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);

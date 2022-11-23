@@ -40,11 +40,11 @@ public:
         // Unforms from the node JSON
         // Note: These are not updated when the uniforms/properties change,
         // so don't use this to other things than checking JSON uniforms.
-        QList<UniformModel::Uniform> jsonUniforms;
-        QString fragmentCode;
-        QString vertexCode;
-        QString qmlCode;
-        QString description;
+        QList<UniformModel::Uniform> jsonUniforms = {};
+        QString fragmentCode = {};
+        QString vertexCode = {};
+        QString qmlCode = {};
+        QString description = {};
         bool operator==(const Node& rhs) const noexcept
         {
            return this->nodeId == rhs.nodeId;

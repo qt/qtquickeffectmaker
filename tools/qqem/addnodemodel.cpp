@@ -11,7 +11,7 @@ AddNodeModel::AddNodeModel(QObject *effectManager)
 {
     m_effectManager = static_cast<EffectManager *>(effectManager);
     connect(this, &QAbstractListModel::modelReset, this, &AddNodeModel::rowCountChanged);
-    QString defaultNodePath = QStringLiteral(QQEM_DATA_PATH) + "/defaultnodes";
+    QString defaultNodePath = m_effectManager->settings()->defaultResourcePath() + "/defaultnodes";
     loadNodesFromPath(defaultNodePath);
 }
 

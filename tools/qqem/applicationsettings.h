@@ -96,6 +96,7 @@ class ApplicationSettings : public QObject
     Q_PROPERTY(bool useLegacyShaders READ useLegacyShaders WRITE setUseLegacyShaders NOTIFY useLegacyShadersChanged)
     Q_PROPERTY(QString codeFontFile READ codeFontFile WRITE setCodeFontFile NOTIFY codeFontFileChanged)
     Q_PROPERTY(int codeFontSize READ codeFontSize WRITE setCodeFontSize NOTIFY codeFontSizeChanged)
+    Q_PROPERTY(QString defaultResourcePath READ defaultResourcePath)
 
 public:
     explicit ApplicationSettings(QObject *parent = nullptr);
@@ -120,6 +121,7 @@ public Q_SLOTS:
     void setCodeFontFile(const QString &font);
     void setCodeFontSize(int size);
     void resetCodeFont();
+    QString defaultResourcePath();
 
 Q_SIGNALS:
     void sourceImagesModelChanged();

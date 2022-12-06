@@ -23,6 +23,7 @@ const QString KEY_PROJECT_FILE = QStringLiteral("projectFile");
 const QString KEY_LEGACY_SHADERS = QStringLiteral("useLegacyShaders");
 const QString KEY_CODE_FONT_FILE = QStringLiteral("codeFontFile");
 const QString KEY_CODE_FONT_SIZE = QStringLiteral("codeFontSize");
+const QString KEY_DEFAULT_RESOURCE_PATH = QStringLiteral("defaultResourcePath");
 
 const QString DEFAULT_CODE_FONT_FILE = QStringLiteral("fonts/SourceCodePro-Regular.ttf");
 const int DEFAULT_CODE_FONT_SIZE = 14;
@@ -127,6 +128,7 @@ QVariant MenusModel::data(const QModelIndex &index, int role) const
 ApplicationSettings::ApplicationSettings(QObject *parent)
     : QObject{parent}
 {
+    m_settings.setValue(KEY_DEFAULT_RESOURCE_PATH, QString(QCoreApplication::applicationDirPath() + "/../qml/QtQuickEffectMaker"));
     m_effectManager = static_cast<EffectManager *>(parent);
     m_sourceImagesModel = new ImagesModel(m_effectManager);
     m_backgroundImagesModel = new ImagesModel(m_effectManager);
@@ -158,7 +160,7 @@ void ApplicationSettings::refreshSourceImagesModel()
 
     // Add default Sources
     for (const auto &source : defaultSources) {
-        QString absolutePath = m_effectManager->relativeToAbsolutePath(source, QStringLiteral(QQEM_DATA_PATH));
+        QString absolutePath = m_effectManager->relativeToAbsolutePath(source, defaultResourcePath());
         addSourceImage(absolutePath, false, false);
     }
 
@@ -409,4 +411,9 @@ void ApplicationSettings::resetCodeFont()
 {
     setCodeFontFile(DEFAULT_CODE_FONT_FILE);
     setCodeFontSize(DEFAULT_CODE_FONT_SIZE);
+}
+
+QString ApplicationSettings::defaultResourcePath()
+{
+    return m_settings.value(KEY_DEFAULT_RESOURCE_PATH).value<QString>();
 }

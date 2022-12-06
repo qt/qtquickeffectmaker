@@ -53,11 +53,6 @@ if(CMAKE_CROSSCOMPILING)
     return()
 endif()
 
-# Set the default nodes path
-set(DATA_PATH ${CMAKE_INSTALL_PREFIX}/qml/QtQuickEffectMaker)
-# When building QQEM locally as standalone application, enable this instead
-#set(DATA_PATH ${CMAKE_BINARY_DIR})
-
 # Copy nodes content
 set(DEFAULTNODES_FOLDER "/defaultnodes")
 set(nodes_folders
@@ -70,4 +65,4 @@ set(nodes_folders
 
 qt_build_repo()
 
-qt_copy_or_install(DIRECTORY ${nodes_folders} DESTINATION ${DATA_PATH}${DEFAULTNODES_FOLDER})
+qt_copy_or_install(DIRECTORY ${nodes_folders} DESTINATION "${INSTALL_QMLDIR}/QtQuickEffectMaker/defaultnodes")

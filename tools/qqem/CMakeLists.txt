@@ -129,11 +129,6 @@ qt_internal_add_resource(${target_name} "qml"
         ${qml_resource_files}
 )
 
-# Set QQEM_DATA_PATH to match nodes content directory
-target_compile_definitions(${target_name} PRIVATE
-    QQEM_DATA_PATH=\"${DATA_PATH}\"
-)
-
 # See if optional syntax highlighting dependency exists
 if (Qt6Quick3DGlslParserPrivate_FOUND)
     target_compile_definitions(${target_name} PRIVATE

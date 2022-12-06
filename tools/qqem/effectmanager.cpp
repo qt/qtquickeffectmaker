@@ -2058,7 +2058,7 @@ bool EffectManager::exportEffect(const QString &dirPath, const QString &filename
             QString blurHelperFilename("BlurHelper.qml");
             QString blurFsFilename("bluritems.frag.qsb");
             QString blurVsFilename("bluritems.vert.qsb");
-            QString blurHelperPath(QStringLiteral(QQEM_DATA_PATH) + "/defaultnodes/common/");
+            QString blurHelperPath(m_settings->defaultResourcePath() + "/defaultnodes/common/");
             QString blurHelperSource(blurHelperPath + blurHelperFilename);
             QString blurFsSource(blurHelperPath + blurFsFilename);
             QString blurVsSource(blurHelperPath + blurVsFilename);

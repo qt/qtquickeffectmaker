@@ -31,7 +31,7 @@ public:
         QString description;
         QString file;
         QString group;
-        QStringList requires;
+        QStringList requiredNodes;
         // Properties as variant list to get access from QML
         QVariantList properties;
         // False when node would overlap with existing node in view
@@ -47,7 +47,7 @@ public:
         Properties,
         CanBeAdded,
         Show,
-        Requires
+        RequiredNodes
     };
 
     explicit AddNodeModel(QObject *effectManager);

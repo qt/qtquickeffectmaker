@@ -30,7 +30,7 @@ QHash<int, QByteArray> AddNodeModel::roleNames() const
     roles[Properties] = "properties";
     roles[CanBeAdded] = "canBeAdded";
     roles[Show] = "show";
-    roles[Requires] = "requires";
+    roles[RequiredNodes] = "requires";
     return roles;
 }
 
@@ -58,8 +58,8 @@ QVariant AddNodeModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(node.canBeAdded);
     else if (role == Show)
         return QVariant::fromValue(node.show);
-    else if (role == Requires)
-        return QVariant::fromValue(node.requires.join(", "));
+    else if (role == RequiredNodes)
+        return QVariant::fromValue(node.requiredNodes.join(", "));
 
     return QVariant();
 }
@@ -114,8 +114,8 @@ void AddNodeModel::loadNodesFromPath(const QString &path) {
                         // Get the required node, remove "@requires"
                         QString l = trimmedLine.sliced(9).trimmed();
                         QString nodeName = l.split(' ').first();
-                        if (!nodeName.isEmpty() && !data.requires.contains(nodeName))
-                            data.requires << nodeName;
+                        if (!nodeName.isEmpty() && !data.requiredNodes.contains(nodeName))
+                            data.requiredNodes << nodeName;
                     }
                 }
                 nodes << data;

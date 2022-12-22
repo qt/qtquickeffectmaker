@@ -54,7 +54,6 @@ if(CMAKE_CROSSCOMPILING)
 endif()
 
 # Copy nodes content
-set(DEFAULTNODES_FOLDER "/defaultnodes")
 set(nodes_folders
     "nodes/basic"
     "nodes/common"
@@ -65,4 +64,6 @@ set(nodes_folders
 
 qt_build_repo()
 
-qt_copy_or_install(DIRECTORY ${nodes_folders} DESTINATION "${INSTALL_QMLDIR}/QtQuickEffectMaker/defaultnodes")
+qt_path_join(nodes_path "${QT_INSTALL_DIR}" "${INSTALL_QMLDIR}/QtQuickEffectMaker/defaultnodes")
+message(NOTICE "Nodes path: ${nodes_path}")
+qt_copy_or_install(DIRECTORY ${nodes_folders} DESTINATION ${nodes_path})

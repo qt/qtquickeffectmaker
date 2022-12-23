@@ -140,7 +140,10 @@ public Q_SLOTS:
     void showHideAddNodeGroup(const QString &groupName, bool show);
     void setEffectPadding(const QRect &newEffectPadding);
 
-    QString stripFileFromURL(const QString &urlString);
+    QString stripFileFromURL(const QString &urlString) const;
+    QString addFileToURL(const QString &urlString) const;
+    QString getDirectory(const QString &path, bool useFileScheme = true) const;
+    QString getDefaultImagesDirectory(bool useFileScheme = true) const;
     void autoIndentCurrentCode(int codeTab, const QString &code);
     bool processKey(int codeTab, int keyCode, int modifiers, QQuickTextEdit *textEdit);
     void setEffectError(const QString &errorMessage, int type = -1, int lineNumber = -1);

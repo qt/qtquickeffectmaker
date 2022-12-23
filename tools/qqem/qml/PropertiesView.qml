@@ -700,6 +700,12 @@ Item {
                                             anchors.fill: parent
                                             onClicked: {
                                                 textureSourceDialog.modelIndex = index;
+                                                if (model.value) {
+                                                    textureSourceDialog.currentFolder = effectManager.getDirectory(model.value);
+                                                    textureSourceDialog.selectedFile = effectManager.addFileToURL(model.value);
+                                                } else {
+                                                    textureSourceDialog.currentFolder = effectManager.getDefaultImagesDirectory();
+                                                }
                                                 textureSourceDialog.open();
                                             }
                                         }

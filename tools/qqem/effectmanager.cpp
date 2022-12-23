@@ -1781,11 +1781,41 @@ QString EffectManager::relativeToAbsolutePath(const QString &path, const QString
 
 // Removes "file:" from the URL path.
 // So e.g. "file:///C:/myimages/steel1.jpg" -> "C:/myimages/steel1.jpg"
-QString EffectManager::stripFileFromURL(const QString &urlString)
+QString EffectManager::stripFileFromURL(const QString &urlString) const
 {
     QUrl url(urlString);
     QString filePath = (url.scheme() == QStringLiteral("file")) ? url.toLocalFile() : url.toString();
     return filePath;
+}
+
+// Adds "file:" scheme to the URL path.
+// So e.g. "C:/myimages/steel1.jpg" -> "file:///C:/myimages/steel1.jpg"
+QString EffectManager::addFileToURL(const QString &urlString) const
+{
+    if (!urlString.startsWith("file:"))
+        return QStringLiteral("file:///") + urlString;
+    return urlString;
+}
+
+// Returns absolute directory of the path.
+// When useFileScheme is true, "file:" scheme is added into result.
+// e.g. "file:///C:/temp/temp.txt" -> "file:///C:/temp"
+QString EffectManager::getDirectory(const QString &path, bool useFileScheme) const
+{
+    QString filePath = stripFileFromURL(path);
+    QFileInfo fi(filePath);
+    QString dir = fi.canonicalPath();
+    if (useFileScheme)
+        dir = addFileToURL(dir);
+    return dir;
+}
+
+QString EffectManager::getDefaultImagesDirectory(bool useFileScheme) const
+{
+    QString dir = m_settings->defaultResourcePath() + QStringLiteral("/defaultnodes/images");
+    if (useFileScheme)
+        dir = addFileToURL(dir);
+    return dir;
 }
 
 // Creates JSON presentation of the \a node.

@@ -400,7 +400,10 @@ ApplicationWindow {
     }
 
     function saveProjectAsAction() {
-        saveProjectAsDialog.currentFile = effectManager.projectFilename;
+        if (effectManager.projectFilename) {
+            saveProjectAsDialog.currentFolder = effectManager.addFileToURL(effectManager.projectDirectory);
+            saveProjectAsDialog.currentFile = effectManager.projectFilename;
+        }
         saveProjectAsDialog.open();
     }
 
@@ -433,7 +436,7 @@ ApplicationWindow {
     }
 
     function exportNodeAction() {
-        saveNodeAsDialog.selectedFile = effectManager.nodeView.selectedNodeName + ".qen";
+        saveNodeAsDialog.currentFile = effectManager.nodeView.selectedNodeName + ".qen";
         saveNodeAsDialog.open();
     }
     function deleteNodeAction() {
@@ -513,8 +516,10 @@ ApplicationWindow {
     }
 
     function renderToImageAction() {
-        if (saveImageAsDialog.currentFile == "")
+        if (saveImageAsDialog.currentFile == "") {
+            saveImageAsDialog.currentFolder = effectManager.addFileToURL(effectManager.projectDirectory);
             saveImageAsDialog.currentFile = "effect_render.png";
+        }
         saveImageAsDialog.open();
     }
 

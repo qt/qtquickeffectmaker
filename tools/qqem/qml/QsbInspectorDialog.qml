@@ -72,6 +72,10 @@ CustomDialog {
         Button {
             text: qsTr("Browse");
             onClicked: {
+                if (qsbInspectorHelper.shaderData.currentFile !== "") {
+                    qsbFileDialog.currentFolder = effectManager.getDirectory(qsbInspectorHelper.shaderData.currentFile);
+                    qsbFileDialog.currentFile = effectManager.addFileToURL(qsbInspectorHelper.shaderData.currentFile);
+                }
                 qsbFileDialog.open();
             }
         }

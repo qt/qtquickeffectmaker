@@ -23,6 +23,7 @@ Window {
 
     FileDialog {
         id: sourceImagesFileDialog
+        currentFolder: effectManager.getDefaultImagesDirectory()
         onAccepted: {
             if (selectedFile) {
                 effectManager.settings.addSourceImage(selectedFile);

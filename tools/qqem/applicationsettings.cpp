@@ -128,7 +128,13 @@ QVariant MenusModel::data(const QModelIndex &index, int role) const
 ApplicationSettings::ApplicationSettings(QObject *parent)
     : QObject{parent}
 {
-    m_settings.setValue(KEY_DEFAULT_RESOURCE_PATH, QString(QCoreApplication::applicationDirPath() + "/../qml/QtQuickEffectMaker"));
+    // Get canonical path into default nodes
+    QString resourcesPath = QString(QCoreApplication::applicationDirPath() +
+                                    QStringLiteral("/../qml/QtQuickEffectMaker"));
+    QFileInfo fi(resourcesPath);
+    resourcesPath = fi.canonicalFilePath();
+    m_settings.setValue(KEY_DEFAULT_RESOURCE_PATH, resourcesPath);
+
     m_effectManager = static_cast<EffectManager *>(parent);
     m_sourceImagesModel = new ImagesModel(m_effectManager);
     m_backgroundImagesModel = new ImagesModel(m_effectManager);

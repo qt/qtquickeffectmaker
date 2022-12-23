@@ -618,6 +618,12 @@ CustomPopup {
                     anchors.centerIn: parent
                     text: "Choose Image"
                     onClicked: {
+                        if (initialDefaultValue) {
+                            textureSourceDialog.currentFolder = effectManager.getDirectory(initialDefaultValue);
+                            textureSourceDialog.selectedFile = effectManager.addFileToURL(initialDefaultValue);
+                        } else {
+                            textureSourceDialog.currentFolder = effectManager.getDefaultImagesDirectory();
+                        }
                         textureSourceDialog.open()
                     }
                 }

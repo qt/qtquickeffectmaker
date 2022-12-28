@@ -589,7 +589,7 @@ CustomPopup {
                 mipmapCheckBox.checked = mipmapEnabled;
             }
             Rectangle {
-                width: 120
+                width: 180
                 height: 120
                 border.width: 1
                 color: mainView.backgroundColor2
@@ -747,7 +747,7 @@ CustomPopup {
                 Layout.preferredWidth: 100
                 color: mainView.foregroundColor2
             }
-            Switch {
+            CheckBox {
                 id: customValueSwitch
                 Layout.row: 2
                 Layout.column: 1

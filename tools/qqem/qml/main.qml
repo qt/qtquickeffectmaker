@@ -86,7 +86,7 @@ ApplicationWindow {
             Action {
                 text: qsTr("Export")
                 onTriggered: exportAction();
-                enabled: effectManager.hasProjectFilename
+                enabled: effectManager.hasProjectFilename && effectManager.effectError.message === ""
             }
             MenuSeparator { }
             Action {

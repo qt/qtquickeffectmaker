@@ -128,7 +128,7 @@ public Q_SLOTS:
     bool saveProject(const QUrl &filename = QString());
     bool newProject(const QString &filepath, const QString &filename, bool clearNodeView, bool createProjectDir = false);
     void closeProject();
-    bool exportEffect(const QString &dirPath, const QString &filename, int exportFlags);
+    bool exportEffect(const QString &dirPath, const QString &filename, int exportFlags, int qsbVersionIndex);
     void cleanupProject();
     void cleanupNodeView(bool initialize = true);
     bool saveSelectedNode(const QUrl &filename);

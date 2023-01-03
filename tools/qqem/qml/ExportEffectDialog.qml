@@ -94,10 +94,30 @@ CustomDialog {
             }
         }
     }
+    Row {
+        id: qsbVersionArea
+        width: parent.width
+        anchors.top: detailsArea.bottom
+        anchors.topMargin: 20
+        spacing: 10
+        Label {
+            anchors.verticalCenter: parent.verticalCenter
+            text: qsTr("QSB version:")
+            font.bold: true
+            font.pixelSize: 14
+            color: mainView.foregroundColor2
+        }
+        ComboBox {
+            id: qsbVersionSelector
+            anchors.verticalCenter: parent.verticalCenter
+            width: 200
+            model: ["Latest", "Qt 6.5 compatibility", "Qt 6.4 compatibility"]
+        }
+    }
     Column {
         id: settingsArea
         width: parent.width
-        anchors.top: detailsArea.bottom
+        anchors.top: qsbVersionArea.bottom
         anchors.topMargin: 20
         Label {
             text: qsTr("Exported files:")
@@ -139,6 +159,7 @@ CustomDialog {
         exportFlags += Number(plainShadersCheckBox.checked) * 4;
         exportFlags += Number(imagesCheckBox.checked) * 8;
         exportFlags += Number(qrcCheckBox.checked) * 16;
-        effectManager.exportEffect(pathTextEdit.text, nameTextEdit.text, exportFlags);
+        var qsbVersionIndex = qsbVersionSelector.currentIndex;
+        effectManager.exportEffect(pathTextEdit.text, nameTextEdit.text, exportFlags, qsbVersionIndex);
     }
 }

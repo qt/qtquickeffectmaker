@@ -691,20 +691,19 @@ QString EffectManager::getQmlImagesString(bool localFiles)
         if (!m_nodeView->m_activeNodesIds.contains(uniform.nodeId))
             continue;
         if (uniform.type == UniformModel::Uniform::Type::Sampler) {
+            QString imagePath = uniform.value.toString();
+            if (imagePath.isEmpty())
+                continue;
             imagesString += "        Image {\n";
-            QString simplifiedName = uniform.name.simplified();
-            simplifiedName = simplifiedName.remove(' ');
-            imagesString += QString("            id: imageItem%1\n").arg(simplifiedName);
+            QString simplifiedName = UniformModel::getImageElementName(uniform);
+            imagesString += QString("            id: %1\n").arg(simplifiedName);
             imagesString += "            anchors.fill: parent\n";
             // File paths are absolute, return as local when requested
-            QString imagePath = uniform.value.toString();
-            if (!imagePath.isEmpty()) {
-                if (localFiles) {
-                    QFileInfo fi(imagePath);
-                    imagePath = fi.fileName();
-                }
-                imagesString += QString("            source: \"%1\"\n").arg(imagePath);
+            if (localFiles) {
+                QFileInfo fi(imagePath);
+                imagePath = fi.fileName();
             }
+            imagesString += QString("            source: \"%1\"\n").arg(imagePath);
             if (!localFiles) {
                 QString mipmapProperty = mipmapPropertyName(uniform.name);
                 imagesString += QString("            mipmap: g_propertyData.%1\n").arg(mipmapProperty);

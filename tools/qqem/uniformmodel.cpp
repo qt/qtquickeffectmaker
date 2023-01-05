@@ -301,6 +301,15 @@ QVariant UniformModel::getInitializedVariant(Uniform::Type type, bool maxValue)
     return QVariant();
 }
 
+// Return name for the image property Image element
+QString UniformModel::getImageElementName(const Uniform &uniform)
+{
+    if (uniform.value.toString().isEmpty())
+        return QStringLiteral("null");
+    QString simplifiedName = uniform.name.simplified();
+    simplifiedName = simplifiedName.remove(' ');
+    return QStringLiteral("imageItem") + simplifiedName;
+}
 
 // This will update the row content at rowIndex
 // When rowIndex = -1, new row will be appended
@@ -406,6 +415,9 @@ bool UniformModel::resetValue(int rowIndex)
 
     emit dataChanged(index, index, {Value});
 
+    // Image element may change, so update component
+    if (uniform.type == Uniform::Type::Sampler)
+        Q_EMIT qmlComponentChanged();
     Q_EMIT uniformsChanged();
 
     return true;
@@ -415,7 +427,6 @@ bool UniformModel::resetValue(int rowIndex)
 bool UniformModel::setImage(int rowIndex, const QVariant &value)
 {
     beginResetModel();
-
     auto &uniform = (*m_uniformTable)[rowIndex];
     uniform.value = value.toString();
 
@@ -426,6 +437,9 @@ bool UniformModel::setImage(int rowIndex, const QVariant &value)
     emit dataChanged(QAbstractItemModel::createIndex(0, 0),
                      QAbstractItemModel::createIndex(rowIndex, 0));
 
+    // Image element may change, so update component
+    if (uniform.type == Uniform::Type::Sampler)
+        Q_EMIT qmlComponentChanged();
     Q_EMIT uniformsChanged();
     return true;
 }
@@ -592,9 +606,7 @@ QString UniformModel::valueAsString(const Uniform &uniform)
     }
     case Uniform::Type::Sampler:
     {
-        QString simplifiedName = uniform.name.simplified();
-        simplifiedName = simplifiedName.remove(' ');
-        s = "imageItem" + simplifiedName;
+        s = getImageElementName(uniform);
         break;
     }
     case Uniform::Type::Define:
@@ -697,9 +709,7 @@ QString UniformModel::valueAsBinding(const Uniform &uniform)
     }
     case Uniform::Type::Sampler:
     {
-        QString simplifiedName = uniform.name.simplified();
-        simplifiedName = simplifiedName.remove(' ');
-        s = "imageItem" + simplifiedName;
+        s = getImageElementName(uniform);
         break;
     }
     }

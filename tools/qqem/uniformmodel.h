@@ -82,6 +82,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role) final;
 
     static QVariant getInitializedVariant(Uniform::Type type, bool maxValue = false);
+    static QString getImageElementName(const Uniform &uniform);
     static QString typeToProperty(Uniform::Type type);
     QString typeToUniform(Uniform::Type type);
     QString valueAsString(const Uniform &uniform);

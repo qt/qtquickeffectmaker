@@ -1452,7 +1452,7 @@ QString EffectManager::getSupportedImageFormatsFilter() const
 {
     auto formats = QImageReader::supportedImageFormats();
     QString imageFilter = QStringLiteral("Image files (");
-    for (const auto &format : qAsConst(formats))
+    for (const auto &format : std::as_const(formats))
         imageFilter += QStringLiteral("*.") + format + QStringLiteral(" ");
     imageFilter += QStringLiteral(")");
     return imageFilter;

@@ -2059,7 +2059,7 @@ bool EffectManager::exportEffect(const QString &dirPath, const QString &filename
                 QString imageFilename = fi.fileName();
                 QString imageFilePath = dirPath + "/" + imageFilename;
                 imagePath = stripFileFromURL(imagePath);
-                if (imagePath == imageFilePath)
+                if (imagePath.compare(imageFilePath, Qt::CaseInsensitive) == 0)
                     continue; // Exporting to same dir, so skip
                 removeIfExists(imageFilePath);
                 QFile imageFile(imagePath);

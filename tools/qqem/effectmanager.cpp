@@ -2285,6 +2285,12 @@ void EffectManager::showHideAddNodeGroup(const QString &groupName, bool show)
         m_addNodeModel->updateShowHide(groupName, show);
 }
 
+void EffectManager::refreshAddNodesList()
+{
+    if (m_addNodeModel)
+        m_addNodeModel->updateNodesList();
+}
+
 const QRect &EffectManager::effectPadding() const
 {
     return m_effectPadding;

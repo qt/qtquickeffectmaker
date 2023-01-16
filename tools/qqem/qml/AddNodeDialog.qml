@@ -188,6 +188,36 @@ CustomPopup {
                     }
                 }
             }
+            BusyIndicator {
+                id: refreshNodesIndicator
+                anchors.centerIn: parent
+                opacity: 0.0
+                running: opacity > 0
+                visible: running
+                function show() {
+                    nodesLoadingIndicatorAnimation.restart();
+                }
+                SequentialAnimation {
+                    id: nodesLoadingIndicatorAnimation
+                    NumberAnimation {
+                        target: refreshNodesIndicator
+                        property: "opacity"
+                        to: 1.0
+                        duration: 250
+                        easing.type: Easing.InOutQuad
+                    }
+                    PauseAnimation {
+                        duration: 500
+                    }
+                    NumberAnimation {
+                        target: refreshNodesIndicator
+                        property: "opacity"
+                        to: 0.0
+                        duration: 250
+                        easing.type: Easing.InOutQuad
+                    }
+                }
+            }
         }
         Item {
             width: parent.width - effectsListView.width
@@ -260,6 +290,16 @@ CustomPopup {
             text: "Cancel"
             onPressed: {
                 rootItem.close();
+            }
+        }
+        Button {
+            id: refreshButton
+            anchors.left: cancelButton.right
+            anchors.leftMargin: 10
+            text: "Refresh"
+            onPressed: {
+                refreshNodesIndicator.show();
+                effectManager.refreshAddNodesList();
             }
         }
         Button {

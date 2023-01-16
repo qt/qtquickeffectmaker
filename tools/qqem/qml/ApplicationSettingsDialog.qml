@@ -14,7 +14,7 @@ Window {
 
     title: qsTr("Preferences")
     width: 660
-    height: 540
+    height: 620
     minimumWidth: 400
     minimumHeight: 400
     color: mainView.backgroundColor1
@@ -38,6 +38,17 @@ Window {
         onAccepted: {
             if (selectedFile) {
                 effectManager.settings.setCodeFontFile(selectedFile);
+            }
+        }
+    }
+
+    FolderDialog {
+        id: customNodePathDialog
+        onAccepted: {
+            if (currentFolder) {
+                let added = effectManager.settings.addCustomNodesPath(currentFolder.toString());
+                if (added)
+                    effectManager.refreshAddNodesList();
             }
         }
     }
@@ -155,6 +166,79 @@ Window {
                                 enabled: model.canRemove
                                 onClicked: {
                                     effectManager.settings.removeSourceImage(model.index);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            Item {
+                width: 1
+                height: 20
+            }
+            Item {
+                id: customNodesToolbar
+                width: parent.width
+                height: 40
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: mainView.foregroundColor2
+                    font.pixelSize: 14
+                    font.bold: true
+                    text: "Custom Nodes"
+                }
+                Button {
+                    id: addCustomNodesPathButton
+                    height: parent.height - 4
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    text: qsTr("Add");
+                    onClicked: {
+                        customNodePathDialog.open();
+                    }
+                }
+            }
+            Rectangle {
+                id: customNodesTable
+                width: parent.width
+                height: 60
+                color: mainView.backgroundColor2
+                border.color: mainView.foregroundColor1
+                border.width: 1
+                ListView {
+                    id: customNodesList
+                    anchors.fill: parent
+                    clip: true
+                    ScrollBar.vertical: ScrollBar {
+                        id: nodesListScrollBar
+                        policy: ScrollBar.AlwaysOn
+                    }
+                    model: effectManager.settings.customNodesModel
+                    delegate: Item {
+                        width: customNodesList.width
+                        height: 30
+                        Row {
+                            id: customNodesDelegateRow
+                            x: 10
+                            width: parent.width - x * 2
+                            height: parent.height
+                            spacing: 10
+                            Text {
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: parent.width - nodesListScrollBar.width - removeNodePathButton.width - customNodesDelegateRow.spacing
+                                text: model.path
+                                color: mainView.foregroundColor2
+                                elide: Text.ElideLeft
+                            }
+                            CustomIconButton {
+                                id: removeNodePathButton
+                                anchors.verticalCenter: parent.verticalCenter
+                                height: parent.height * 0.6
+                                width: height
+                                icon: "images/icon_remove_shadow.png"
+                                description: "Remove"
+                                onClicked: {
+                                    effectManager.settings.removeCustomNodesPath(model.index);
                                 }
                             }
                         }

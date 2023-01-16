@@ -87,12 +87,42 @@ private:
     EffectManager *m_effectManager = nullptr;
 };
 
+class CustomNodesModel : public QAbstractListModel
+{
+    Q_OBJECT
+    Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)
+
+public:
+    struct NodesModelData {
+        QString path;
+    };
+
+    enum ModelRoles {
+        Path = Qt::UserRole + 1,
+    };
+
+    explicit CustomNodesModel(QObject *effectManager);
+
+    int rowCount(const QModelIndex & = QModelIndex()) const final;
+    QVariant data(const QModelIndex &index, int role) const final;
+    QHash<int, QByteArray> roleNames() const final;
+
+Q_SIGNALS:
+    void rowCountChanged();
+
+private:
+    friend class ApplicationSettings;
+    QList<NodesModelData> m_modelList;
+    EffectManager *m_effectManager = nullptr;
+};
+
 class ApplicationSettings : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(ImagesModel *sourceImagesModel READ sourceImagesModel NOTIFY sourceImagesModelChanged)
     Q_PROPERTY(ImagesModel *backgroundImagesModel READ backgroundImagesModel NOTIFY backgroundImagesModelChanged)
     Q_PROPERTY(MenusModel *recentProjectsModel READ recentProjectsModel NOTIFY recentProjectsModelChanged)
+    Q_PROPERTY(CustomNodesModel *customNodesModel READ customNodesModel NOTIFY customNodesModelChanged)
     Q_PROPERTY(bool useLegacyShaders READ useLegacyShaders WRITE setUseLegacyShaders NOTIFY useLegacyShadersChanged)
     Q_PROPERTY(QString codeFontFile READ codeFontFile WRITE setCodeFontFile NOTIFY codeFontFileChanged)
     Q_PROPERTY(int codeFontSize READ codeFontSize WRITE setCodeFontSize NOTIFY codeFontSizeChanged)
@@ -104,6 +134,7 @@ public:
     ImagesModel *sourceImagesModel() const;
     ImagesModel *backgroundImagesModel() const;
     MenusModel *recentProjectsModel() const;
+    CustomNodesModel *customNodesModel() const;
     bool useLegacyShaders() const;
     QString codeFontFile() const;
     int codeFontSize() const;
@@ -122,11 +153,16 @@ public Q_SLOTS:
     void setCodeFontSize(int size);
     void resetCodeFont();
     QString defaultResourcePath();
+    QStringList customNodesPaths() const;
+    void refreshCustomNodesModel();
+    bool addCustomNodesPath(const QString &path, bool updateSettings = true);
+    bool removeCustomNodesPath(int index);
 
 Q_SIGNALS:
     void sourceImagesModelChanged();
     void backgroundImagesModelChanged();
     void recentProjectsModelChanged();
+    void customNodesModelChanged();
     void useLegacyShadersChanged();
     void codeFontFileChanged();
     void codeFontSizeChanged();
@@ -137,6 +173,7 @@ private:
     ImagesModel *m_sourceImagesModel = nullptr;
     ImagesModel *m_backgroundImagesModel = nullptr;
     MenusModel *m_recentProjectsModel = nullptr;
+    CustomNodesModel *m_customNodesModel = nullptr;
 };
 
 #endif // APPLICATIONSETTINGS_H

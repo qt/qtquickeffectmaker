@@ -138,6 +138,7 @@ public Q_SLOTS:
     QString getHelpTextString();
     void updateAddNodeData();
     void showHideAddNodeGroup(const QString &groupName, bool show);
+    void refreshAddNodesList();
     void setEffectPadding(const QRect &newEffectPadding);
 
     QString stripFileFromURL(const QString &urlString) const;

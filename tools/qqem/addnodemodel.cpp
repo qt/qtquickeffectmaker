@@ -6,13 +6,17 @@
 #include "effectmanager.h"
 #include <QDir>
 
+bool operator==(const AddNodeModel::NodeData &a, const AddNodeModel::NodeData &b) noexcept
+{
+    return a.name == b.name;
+}
+
 AddNodeModel::AddNodeModel(QObject *effectManager)
     : QAbstractListModel(effectManager)
 {
     m_effectManager = static_cast<EffectManager *>(effectManager);
     connect(this, &QAbstractListModel::modelReset, this, &AddNodeModel::rowCountChanged);
-    QString defaultNodePath = m_effectManager->settings()->defaultResourcePath() + "/defaultnodes";
-    loadNodesFromPath(defaultNodePath);
+    updateNodesList();
 }
 
 int AddNodeModel::rowCount(const QModelIndex &) const
@@ -118,17 +122,15 @@ void AddNodeModel::loadNodesFromPath(const QString &path) {
                             data.requiredNodes << nodeName;
                     }
                 }
-                nodes << data;
+                if (!m_modelList.contains(data))
+                    nodes << data;
             }
         }
     }
 
     // Add all nodes into model
-    beginResetModel();
-    m_modelList.clear();
     for (const auto &node : nodes)
         m_modelList << node;
-    endResetModel();
 }
 
 void AddNodeModel::updateCanBeAdded(const QStringList &propertyNames)
@@ -159,4 +161,24 @@ void AddNodeModel::updateShowHide(const QString &groupName, bool show)
         }
         i++;
     }
+}
+
+void AddNodeModel::updateNodesList()
+{
+    beginResetModel();
+
+    m_modelList.clear();
+
+    QString defaultNodePath = m_effectManager->settings()->defaultResourcePath() + "/defaultnodes";
+    loadNodesFromPath(defaultNodePath);
+
+    auto customNodesPaths = m_effectManager->settings()->customNodesPaths();
+    for (const auto &nodesPath : std::as_const(customNodesPaths))
+         loadNodesFromPath(nodesPath);
+
+    static QString envCustomNodePath = qEnvironmentVariable("QQEM_CUSTOM_NODES_PATH");
+    if (!envCustomNodePath.isEmpty())
+        loadNodesFromPath(envCustomNodePath);
+
+    endResetModel();
 }

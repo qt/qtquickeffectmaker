@@ -24,6 +24,7 @@ const QString KEY_LEGACY_SHADERS = QStringLiteral("useLegacyShaders");
 const QString KEY_CODE_FONT_FILE = QStringLiteral("codeFontFile");
 const QString KEY_CODE_FONT_SIZE = QStringLiteral("codeFontSize");
 const QString KEY_DEFAULT_RESOURCE_PATH = QStringLiteral("defaultResourcePath");
+const QString KEY_CUSTOM_NODE_PATHS = QStringLiteral("customNodePaths");
 
 const QString DEFAULT_CODE_FONT_FILE = QStringLiteral("fonts/SourceCodePro-Regular.ttf");
 const int DEFAULT_CODE_FONT_SIZE = 14;
@@ -125,6 +126,40 @@ QVariant MenusModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+CustomNodesModel::CustomNodesModel(QObject *effectManager)
+    : QAbstractListModel(effectManager)
+{
+    m_effectManager = static_cast<EffectManager *>(effectManager);
+}
+
+int CustomNodesModel::rowCount(const QModelIndex &) const
+{
+    return m_modelList.size();
+}
+
+QHash<int, QByteArray> CustomNodesModel::roleNames() const
+{
+    QHash<int, QByteArray> roles;
+    roles[Path] = "path";
+    return roles;
+}
+
+QVariant CustomNodesModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+
+    if (index.row() >= m_modelList.size())
+        return QVariant();
+
+    const auto &item = (m_modelList)[index.row()];
+
+    if (role == Path)
+        return QVariant::fromValue(item.path);
+
+    return QVariant();
+}
+
 ApplicationSettings::ApplicationSettings(QObject *parent)
     : QObject{parent}
 {
@@ -139,8 +174,10 @@ ApplicationSettings::ApplicationSettings(QObject *parent)
     m_sourceImagesModel = new ImagesModel(m_effectManager);
     m_backgroundImagesModel = new ImagesModel(m_effectManager);
     m_recentProjectsModel = new MenusModel(m_effectManager);
+    m_customNodesModel = new CustomNodesModel(m_effectManager);
 
     refreshSourceImagesModel();
+    refreshCustomNodesModel();
 
     // Add default backgrounds
     for (const auto &source : defaultBackgrounds) {
@@ -369,6 +406,11 @@ MenusModel *ApplicationSettings::recentProjectsModel() const
     return m_recentProjectsModel;
 }
 
+CustomNodesModel *ApplicationSettings::customNodesModel() const
+{
+    return m_customNodesModel;
+}
+
 bool ApplicationSettings::useLegacyShaders() const
 {
     return m_settings.value(KEY_LEGACY_SHADERS, false).toBool();
@@ -422,4 +464,68 @@ void ApplicationSettings::resetCodeFont()
 QString ApplicationSettings::defaultResourcePath()
 {
     return m_settings.value(KEY_DEFAULT_RESOURCE_PATH).value<QString>();
+}
+
+QStringList ApplicationSettings::customNodesPaths() const
+{
+    return m_settings.value(KEY_CUSTOM_NODE_PATHS).value<QStringList>();
+}
+
+// Refresh the custom nodes path list
+void ApplicationSettings::refreshCustomNodesModel()
+{
+    // Add custom sources from settings
+    QStringList customNodes = m_settings.value(KEY_CUSTOM_NODE_PATHS).value<QStringList>();
+    for (const auto &source : customNodes)
+        addCustomNodesPath(source, false);
+}
+
+bool ApplicationSettings::addCustomNodesPath(const QString &path, bool updateSettings)
+{
+    if (path.isEmpty())
+        return false;
+
+    QString newPath = m_effectManager->stripFileFromURL(path);
+    // Check for duplicates
+    for (const auto &item : m_customNodesModel->m_modelList) {
+        if (item.path == newPath) {
+            qWarning("Path already exists in the model, so not adding");
+            return false;
+        }
+    }
+
+    m_customNodesModel->beginResetModel();
+    CustomNodesModel::NodesModelData d;
+    d.path = newPath;
+    m_customNodesModel->m_modelList.append(d);
+    m_customNodesModel->endResetModel();
+
+    if (updateSettings) {
+        // Add also into settings
+        QStringList customNodes = m_settings.value(KEY_CUSTOM_NODE_PATHS).value<QStringList>();
+        if (!customNodes.contains(d.path)) {
+            customNodes.append(d.path);
+            m_settings.setValue(KEY_CUSTOM_NODE_PATHS, customNodes);
+        }
+    }
+
+    return true;
+}
+
+bool ApplicationSettings::removeCustomNodesPath(int index)
+{
+    if (index < 0 || index >= m_customNodesModel->m_modelList.size())
+        return false;
+
+    m_customNodesModel->beginResetModel();
+    m_customNodesModel->m_modelList.removeAt(index);
+    m_customNodesModel->endResetModel();
+
+    QStringList customSources = m_settings.value(KEY_CUSTOM_NODE_PATHS).value<QStringList>();
+    if (index < customSources.size()) {
+        customSources.removeAt(index);
+        m_settings.setValue(KEY_CUSTOM_NODE_PATHS, customSources);
+    }
+
+    return true;
 }

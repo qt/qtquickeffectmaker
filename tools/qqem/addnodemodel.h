@@ -58,6 +58,7 @@ public:
 
     void updateCanBeAdded(const QStringList &propertyNames);
     void updateShowHide(const QString &groupName, bool show);
+    void updateNodesList();
 
 signals:
     void rowCountChanged();
@@ -68,6 +69,8 @@ private:
     EffectManager *m_effectManager = nullptr;
 
 };
+
+bool operator==(const AddNodeModel::NodeData &a, const AddNodeModel::NodeData &b) noexcept;
 
 Q_DECLARE_METATYPE(NodeDataProperty);
 

@@ -505,6 +505,10 @@ void EffectManager::bakeShaders(bool forced)
 
 void EffectManager::doBakeShaders()
 {
+    // Requires patches from QTBUG-101062.
+    // TODO: Make configurable
+    //m_baker.setQsbVersion(5);
+
     // First update the features based on shader content
     // This will make sure that next calls to generate* will produce correct uniforms.
     m_shaderFeatures.update(generateVertexShader(false), generateFragmentShader(false), m_previewEffectPropertiesString);
@@ -1984,7 +1988,7 @@ void EffectManager::closeProject()
     setProjectName(QString());
 }
 
-bool EffectManager::exportEffect(const QString &dirPath, const QString &filename, int exportFlags, int qsbVersionIndex)
+bool EffectManager::exportEffect(const QString &dirPath, const QString &filename, int exportFlags)
 {
     if (dirPath.isEmpty() || filename.isEmpty()) {
         QString error = QString("Error: Couldn't export the effect: '%1/%2'").arg(dirPath, filename);
@@ -2024,29 +2028,15 @@ bool EffectManager::exportEffect(const QString &dirPath, const QString &filename
     fsSourceFilename = fsSourceFilename.toLower();
     qrcFilename = qrcFilename.toLower();
 
-    // Bake shaders with correct settings
+    // Copy shaders locally
     if (exportFlags & QSBShaders) {
-        auto qsbVersion = QShader::SerializedFormatVersion::Latest;
-        if (qsbVersionIndex == 1)
-            qsbVersion = QShader::SerializedFormatVersion::Qt_6_5;
-        else if (qsbVersionIndex == 2)
-            qsbVersion = QShader::SerializedFormatVersion::Qt_6_4;
-
         QString vsFilePath = dirPath + "/" + vsFilename;
         removeIfExists(vsFilePath);
-        m_baker.setSourceString(m_vertexShader.toUtf8(), QShader::VertexStage);
-        QShader vertShader = m_baker.bake();
-        if (vertShader.isValid())
-            writeToFile(vertShader.serialized(qsbVersion), vsFilePath, FileType::Binary);
-
+        m_vertexShaderFile.copy(vsFilePath);
         exportedFilenames << vsFilename;
         QString fsFilePath = dirPath + "/" + fsFilename;
         removeIfExists(fsFilePath);
-        m_baker.setSourceString(m_fragmentShader.toUtf8(), QShader::FragmentStage);
-        QShader fragShader = m_baker.bake();
-        if (fragShader.isValid())
-            writeToFile(fragShader.serialized(qsbVersion), fsFilePath, FileType::Binary);
-
+        m_fragmentShaderFile.copy(fsFilePath);
         exportedFilenames << fsFilename;
     }
 

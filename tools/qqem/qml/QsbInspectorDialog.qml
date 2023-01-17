@@ -121,11 +121,9 @@ CustomDialog {
                 if (qsbVersion === 5) {
                     return qsbVersion + " (Qt 6.0 - 6.3)";
                 } else if (qsbVersion === 6) {
-                    return qsbVersion + " (Qt 6.4)";
-                } else if (qsbVersion === 8) {
-                    return qsbVersion + " (Qt 6.5 or newer)";
+                    return qsbVersion + " (Qt 6.4 or newer)";
                 }
-                return qsbVersion;
+                return "";
             }
 
             Text {

@@ -1,0 +1,5 @@
+include($QT_INSTALL_DOCS/global/qt-module-defaults-online-commercial.qdocconf)
+include(../qtquickeffectmaker-project.qdocconf)
+
+# Sidebar for online documentation build
+HTML.stylesheets += style/qt-sidebar.html

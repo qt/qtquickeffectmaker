@@ -1,0 +1,2 @@
+include($QT_INSTALL_DOCS/global/qt-module-defaults.qdocconf)
+include(qtquickeffectmaker-project.qdocconf)

@@ -1,0 +1,34 @@
+// Copyright (C) 2023 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial
+/*!
+    \page qqem-index.html
+    \nextpage qqem-installing.html
+
+    \title Qt Quick Effect Maker
+
+    \e {Qt Quick Effect Maker} is a tool for creating shader effects for
+    Qt Quick with high productivity and performance.
+*/
+
+/*!
+    \page qqem-toc.html
+    \title All topics
+
+    \list
+        \li Getting started
+          \list
+            \li \l {Installing Qt Quick Effect Maker}
+            \li \l {Creating your first effect}
+          \endlist
+        \li Concepts
+          \list
+            \li \l {About Qt Quick Effect Maker}
+          \endlist
+        \li How-tos
+          \list
+            \li \l {Porting ShaderToy shaders for Qt Quick Effect Maker}
+            \li \l {Troubleshooting}
+          \endlist
+    \endlist
+
+*/

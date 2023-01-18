@@ -1,0 +1,11 @@
+// Copyright (C) 2023 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial
+/*!
+    \page qqem-porting-shadertoy.html
+    \previouspage qqem-concept.html
+    \nextpage qqem-troubleshooting.html
+
+    \title Porting ShaderToy shaders for Qt Quick Effect Maker
+
+*/
+

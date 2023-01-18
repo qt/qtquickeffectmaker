@@ -1,0 +1,10 @@
+// Copyright (C) 2023 The Qt Company Ltd.
+// SPDX-License-Identifier: LicenseRef-Qt-Commercial
+/*!
+    \page qqem-concept.html
+    \previouspage qqem-create-first-effect.html
+    \nextpage qqem-porting-shadertoy.html
+
+    \title About Qt Quick Effect Maker
+
+*/

@@ -35,7 +35,6 @@
       \li \b {Pure Qt Quick}: Qt Quick Effect Maker is implemented with Qt Quick and
       Qt Quick Controls. The work flow is designed for Qt Quick and Qt RHI.
     \endlist
-
 */
 
 /*!

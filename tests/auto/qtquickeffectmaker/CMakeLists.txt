@@ -5,7 +5,7 @@ qt_internal_add_test(tst_qtquickeffectmaker
     SOURCES
         tst_qtquickeffectmaker.cpp
     DEFINES
-        SRCDIR=\\\"${CMAKE_CURRENT_SOURCE_DIR}/\\\"
+        SRCDIR="${CMAKE_CURRENT_SOURCE_DIR}/"
     LIBRARIES
         Qt::Gui
         Qt::Qml

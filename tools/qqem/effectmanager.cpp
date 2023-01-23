@@ -97,6 +97,7 @@ EffectManager::EffectManager(QObject *parent) : QObject(parent)
         m_shaderFeatures.update(generateVertexShader(false), generateFragmentShader(false), m_previewEffectPropertiesString);
     });
     connect(m_uniformModel, &UniformModel::uniformsChanged, this, [this]() {
+        updateImageWatchers();
         bakeShaders();
     });
     connect(m_uniformModel, &UniformModel::addFSCode, this, [this](const QString &code) {
@@ -104,6 +105,20 @@ EffectManager::EffectManager(QObject *parent) : QObject(parent)
             selectedNode->fragmentCode += code;
             Q_EMIT m_nodeView->selectedNodeFragmentCodeChanged();
         }
+    });
+
+    connect(&m_fileWatcher, &QFileSystemWatcher::fileChanged, this, [this]() {
+        // Update component with images not set.
+        m_loadComponentImages = false;
+        updateQmlComponent();
+        // Then enable component images with a longer delay than
+        // the component updating delay. This way Image elements
+        // will relaod the changed image files.
+        const int enableImagesDelay = effectUpdateDelay() + 100;
+        QTimer::singleShot(enableImagesDelay, this, [this]() {
+            m_loadComponentImages = true;
+            updateQmlComponent();
+        } );
     });
 }
 
@@ -700,7 +715,8 @@ QString EffectManager::getQmlImagesString(bool localFiles)
                 QFileInfo fi(imagePath);
                 imagePath = fi.fileName();
             }
-            imagesString += QString("            source: \"%1\"\n").arg(imagePath);
+            if (m_loadComponentImages)
+                imagesString += QString("            source: \"%1\"\n").arg(imagePath);
             if (!localFiles) {
                 QString mipmapProperty = mipmapPropertyName(uniform.name);
                 imagesString += QString("            mipmap: g_propertyData.%1\n").arg(mipmapProperty);
@@ -1464,6 +1480,7 @@ void EffectManager::cleanupProject()
     Q_EMIT exportFlagsChanged();
     // Reset also settings
     setEffectPadding(QRect(0, 0, 0, 0));
+    clearImageWatchers();
 }
 
 QString EffectManager::replaceOldTagsWithNew(const QString &code) {
@@ -2335,4 +2352,24 @@ bool EffectManager::processKey(int codeTab, int keyCode, int modifiers, QQuickTe
         isAccepted = m_codeHelper->processKey(textEdit, keyCode, modifiers);
 
     return isAccepted;
+}
+
+void EffectManager::updateImageWatchers()
+{
+    for (const auto &uniform : std::as_const(m_uniformTable)) {
+        if (uniform.type == UniformModel::Uniform::Type::Sampler) {
+            // Watch all image properties files
+            QString imagePath = stripFileFromURL(uniform.value.toString());
+            if (imagePath.isEmpty())
+                continue;
+            m_fileWatcher.addPath(imagePath);
+        }
+    }
+}
+
+void EffectManager::clearImageWatchers()
+{
+    const auto watchedFiles = m_fileWatcher.files();
+    if (!watchedFiles.isEmpty())
+        m_fileWatcher.removePaths(watchedFiles);
 }

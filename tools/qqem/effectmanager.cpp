@@ -1617,6 +1617,9 @@ bool EffectManager::loadProject(const QUrl &filename)
                         // And QML
                         if (nodeObject.contains("qmlCode") && nodeObject["qmlCode"].isArray())
                             node->qmlCode = codeFromJsonArray(nodeObject["qmlCode"].toArray());
+                        Q_EMIT m_nodeView->selectedNodeFragmentCodeChanged();
+                        Q_EMIT m_nodeView->selectedNodeVertexCodeChanged();
+                        Q_EMIT m_nodeView->selectedNodeQmlCodeChanged();
                     }
                 }
             }
@@ -2187,6 +2190,11 @@ void EffectManager::cleanupNodeView(bool initialize)
         if (node) {
             node->vertexCode = getDefaultRootVertexShader().join('\n');
             node->fragmentCode = getDefaultRootFragmentShader().join('\n');
+            node->qmlCode.clear();
+            m_nodeView->selectMainNode();
+            Q_EMIT m_nodeView->selectedNodeFragmentCodeChanged();
+            Q_EMIT m_nodeView->selectedNodeVertexCodeChanged();
+            Q_EMIT m_nodeView->selectedNodeQmlCodeChanged();
         }
     }
     m_nodeView->updateArrowsPositions();

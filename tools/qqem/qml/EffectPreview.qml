@@ -215,7 +215,7 @@ Item {
 
     Timer {
         id: updateTimer
-        interval: 200
+        interval: effectManager.effectUpdateDelay();
         onTriggered: {
             console.debug("Updating ShaderEffect!");
             effectManager.updateQmlComponent();

@@ -8,6 +8,7 @@
 #include <QTemporaryFile>
 #include <QTimer>
 #include <QQmlPropertyMap>
+#include <QFileSystemWatcher>
 #include "uniformmodel.h"
 #include "nodeview.h"
 #include "shaderfeatures.h"
@@ -16,6 +17,9 @@
 #include "addnodemodel.h"
 #include "applicationsettings.h"
 #include "codehelper.h"
+
+// The delay in ms to wait until updating the effect
+const int EFFECT_UPDATE_DELAY = 200;
 
 // This will be used for commandline arguments.
 extern QQmlPropertyMap g_argData;
@@ -115,6 +119,10 @@ public:
 
     Q_INVOKABLE QString mipmapPropertyName(const QString &name) const;
     Q_INVOKABLE QString getSupportedImageFormatsFilter() const;
+
+    Q_INVOKABLE int effectUpdateDelay() const {
+        return EFFECT_UPDATE_DELAY;
+    }
 
 public Q_SLOTS:
     QString generateVertexShader(bool includeUniforms = true);
@@ -227,6 +235,8 @@ private:
     QString codeFromJsonArray(const QJsonArray &codeArray);
     QString absoluteToRelativePath(const QString &path, const QString &toPath = QString());
     QString relativeToAbsolutePath(const QString &path, const QString &toPath = QString());
+    void updateImageWatchers();
+    void clearImageWatchers();
 
     UniformModel *m_uniformModel = nullptr;
     UniformModel::UniformTable m_uniformTable;
@@ -273,11 +283,13 @@ private:
     // When true, shaders are baked automatically after a
     // short delay when they change.
     bool m_autoPlayEffect = true;
+    bool m_loadComponentImages = true;
 
     ShaderFeatures m_shaderFeatures;
     AddNodeModel *m_addNodeModel = nullptr;
     QStringList m_shaderVaryingVariables;
     QRect m_effectPadding;
+    QFileSystemWatcher m_fileWatcher;
 };
 
 #endif // EFFECTMANAGER_H

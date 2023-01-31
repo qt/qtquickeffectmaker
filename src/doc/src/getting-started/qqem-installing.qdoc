@@ -7,5 +7,58 @@
 
     \title Installing Qt Quick Effect Maker
 
-*/
+    You can run Qt Quick Effect Maker as a standalone tool but it is also included in
+    \l{https://doc.qt.io/qtdesignstudio/}{Qt Design Studio}.
 
+    \section1 Installing Qt Quick Effect Maker standalone
+
+    Install Qt Quick Effect Maker with the Unified Qt Installer.
+
+    \list 1
+        \li Sign in to \l{https://account.qt.io/s/downloads}{Qt Account Downloads}.
+        \li Download \uicontrol {Unified Qt Installer}.
+        \li Open the Installer.
+        \li Continue to \uicontrol {Installation Folder} and select
+        \uicontrol {Custom installation}.
+        \li Select \uicontrol {Next}.
+        \li Go to \uicontrol Qt > \uicontrol {Qt 6.5} (or newer version) >
+        \uicontrol {Additional Libraries} and select \uicontrol {Qt Quick Effect Maker}.
+        \li Complete the installation and close the Unified Qt Installer.
+    \endlist
+
+    \image qqem-online-installer.webp
+
+    \section1 Opening Qt Quick Effect Maker standalone
+
+    To open Qt Quick Effect Maker, run \c qqem.exe located in
+    the \c bin folder of your Qt installation, for example,
+    \c{C:/Qt/6.6.0/msvc2019_64/bin}.
+
+    \section1 Opening Qt Quick Effect Maker from Qt Design Studio
+
+    To open a Qt Quick Effect Maker file in Qt Quick Effect Maker from
+    Qt Design Studio, double-click the file in the \uicontrol Assets view.
+
+    \section1 Creating an effect file in Qt Design Studio
+
+    Create Qt Quick Effect Maker effect (.qep) files in Qt Design Studio and
+    then edit them in Qt Quick Effect Maker.
+
+    To create an effect file:
+
+    \list 1
+      \li In Qt Design Studio, right-click in the \uicontrol Assets view and
+      select \uicontrol {New Effect}.
+      Qt Design Studio creates an effect file and opens it in Qt Quick Effect Maker.
+      \li In Qt Quick Effect Maker:
+        \list 1
+          \li Edit the effect.
+          \li Select \uicontrol File > \uicontrol Save.
+          \li Select \uicontrol File > \uicontrol Export.
+          \li With the default settings, select \uicontrol OK.
+          \image effect-maker-export.png
+        \endlist
+    \endlist
+
+    Now, close Qt Quick Effect Maker and go back to Qt Design Studio.
+*/

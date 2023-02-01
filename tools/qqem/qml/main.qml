@@ -41,17 +41,19 @@ ApplicationWindow {
             Action {
                 text: qsTr("&New Project")
                 onTriggered: maybeNewProjectAction();
+                enabled: !qdsMode
                 shortcut: StandardKey.New
             }
             Action {
                 text: qsTr("&Open Project")
                 onTriggered: maybeOpenProjectAction();
+                enabled: !qdsMode
                 shortcut: StandardKey.Open
             }
             Menu {
                 id: recentProjectsMenu
                 title: "Recent Projects"
-                enabled: recentProjectsRepeater.count > 0
+                enabled: !qdsMode && recentProjectsRepeater.count > 0
                 Repeater {
                     id: recentProjectsRepeater
                     model: effectManager.settings.recentProjectsModel
@@ -67,7 +69,7 @@ ApplicationWindow {
             Action {
                 text: qsTr("Close Project")
                 onTriggered: maybeCloseProjectAction();
-                enabled: effectManager.hasProjectFilename
+                enabled: !qdsMode && effectManager.hasProjectFilename
                 shortcut: StandardKey.Close
             }
             MenuSeparator { }
@@ -79,14 +81,20 @@ ApplicationWindow {
             Action {
                 text: qsTr("Save &As...")
                 onTriggered: saveProjectAsAction();
-                enabled: effectManager.hasProjectFilename
+                enabled: !qdsMode && effectManager.hasProjectFilename
                 shortcut: StandardKey.SaveAs
             }
             MenuSeparator { }
             Action {
-                text: qsTr("Export")
+                text: qsTr("&Export")
                 onTriggered: exportAction();
-                enabled: effectManager.hasProjectFilename && effectManager.effectError.message === ""
+                enabled: !qdsMode && effectManager.hasProjectFilename && effectManager.effectError.message === ""
+                shortcut: "Ctrl+E"
+            }
+            Action {
+                text: qsTr("Export As")
+                onTriggered: exportAsAction();
+                enabled: !qdsMode && effectManager.hasProjectFilename && effectManager.effectError.message === ""
             }
             MenuSeparator { }
             Action {
@@ -339,10 +347,24 @@ ApplicationWindow {
     }
 
     function saveProjectAction() {
-        if (effectManager.hasProjectFilename)
+        if (qdsMode) {
+            saveAndExportProjectAction();
+        } else {
+            if (effectManager.hasProjectFilename)
+                effectManager.saveProject();
+            else
+                newProjectAction(false);
+        }
+    }
+
+    function saveAndExportProjectAction() {
+        if (effectManager.hasProjectFilename) {
             effectManager.saveProject();
-        else
-            newProjectAction(false);
+            mainWindow.exportAction();
+        } else {
+            newProjectDialog.exportNext = true;
+            mainWindow.newProjectAction(false);
+        }
     }
 
     function maybeOpenProjectAction(openFileName) {
@@ -456,6 +478,17 @@ ApplicationWindow {
     }
 
     function exportAction() {
+        if (effectManager.exportFilename !== "") {
+            // Export with the default/latest settings
+            // without showing the dialog.
+            exportEffectDialog.initializeDialog();
+            exportEffectDialog.exportEffect();
+        } else {
+            exportAsAction();
+        }
+    }
+
+    function exportAsAction() {
         exportEffectDialog.open();
     }
 

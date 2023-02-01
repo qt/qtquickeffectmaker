@@ -112,6 +112,18 @@ Item {
                         radius: width / 2
                     }
                 }
+                CustomIconButton {
+                    id: exportButton
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height * 0.6
+                    width: height
+                    icon: "images/icon_export.png"
+                    description: "Export the effect"
+                    enabled: (effectManager.hasProjectFilename && effectManager.effectError.message === "")
+                    onClicked: {
+                        mainWindow.exportAction();
+                    }
+                }
             }
             Row {
                 id: previewToolbar

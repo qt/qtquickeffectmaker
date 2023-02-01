@@ -21,14 +21,7 @@ CustomDialog {
     closePolicy: Popup.NoAutoClose
 
     onAboutToShow: {
-        nameTextEdit.text = initialName();
-        pathTextEdit.text = initialPath();
-        // Note: These must match with EffectManager ExportFlags
-        qmlComponentCheckBox.checked = (effectManager.exportFlags & 1);
-        qbsShadersCheckBox.checked = (effectManager.exportFlags & 2);
-        plainShadersCheckBox.checked = (effectManager.exportFlags & 4);
-        imagesCheckBox.checked = (effectManager.exportFlags & 8);
-        qrcCheckBox.checked = (effectManager.exportFlags & 16);
+        root.initializeDialog();
     }
 
     function initialName() {
@@ -47,6 +40,28 @@ CustomDialog {
             return effectManager.stripFileFromURL(effectManager.exportDirectory);
         else
             return effectManager.stripFileFromURL(defaultPath);
+    }
+
+    function initializeDialog() {
+        nameTextEdit.text = initialName();
+        pathTextEdit.text = initialPath();
+        // Note: These must match with EffectManager ExportFlags
+        qmlComponentCheckBox.checked = (effectManager.exportFlags & 1);
+        qbsShadersCheckBox.checked = (effectManager.exportFlags & 2);
+        plainShadersCheckBox.checked = (effectManager.exportFlags & 4);
+        imagesCheckBox.checked = (effectManager.exportFlags & 8);
+        qrcCheckBox.checked = (effectManager.exportFlags & 16);
+    }
+
+    function exportEffect() {
+        var exportFlags = 0;
+        // Note: These must match with EffectManager ExportFlags
+        exportFlags += Number(qmlComponentCheckBox.checked) * 1;
+        exportFlags += Number(qbsShadersCheckBox.checked) * 2;
+        exportFlags += Number(plainShadersCheckBox.checked) * 4;
+        exportFlags += Number(imagesCheckBox.checked) * 8;
+        exportFlags += Number(qrcCheckBox.checked) * 16;
+        effectManager.exportEffect(pathTextEdit.text, nameTextEdit.text, exportFlags);
     }
 
     FolderDialog {
@@ -132,13 +147,6 @@ CustomDialog {
         }
     }
     onAccepted: {
-        var exportFlags = 0;
-        // Note: These must match with EffectManager ExportFlags
-        exportFlags += Number(qmlComponentCheckBox.checked) * 1;
-        exportFlags += Number(qbsShadersCheckBox.checked) * 2;
-        exportFlags += Number(plainShadersCheckBox.checked) * 4;
-        exportFlags += Number(imagesCheckBox.checked) * 8;
-        exportFlags += Number(qrcCheckBox.checked) * 16;
-        effectManager.exportEffect(pathTextEdit.text, nameTextEdit.text, exportFlags);
+        root.exportEffect();
     }
 }

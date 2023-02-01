@@ -109,6 +109,7 @@ set(qml_resource_files
     "qml/images/icon_zoom_auto.png"
     "qml/images/icon_zoom_in.png"
     "qml/images/icon_zoom_out.png"
+    "qml/images/icon_export.png"
     "qml/images/item_border.png"
     "qml/images/nodeview_background.jpg"
     "qml/images/toggle_background.png"

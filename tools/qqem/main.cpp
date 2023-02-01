@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
         freopen_s(&err, "CONOUT$", "w", stderr);
     }
 #endif
+    bool isQDSMode = false;
     QGuiApplication app(argc, argv);
     app.setOrganizationName("The Qt Company");
     app.setOrganizationDomain("qt.io");
@@ -60,6 +61,8 @@ int main(int argc, char *argv[])
         g_argData.insert("effects_project_path", projectPath);
     }
     if (cmdLineParser.isSet(exportPathOption)) {
+        // Switch to QDS mode when the exportPath is given.
+        isQDSMode = true;
         auto val = cmdLineParser.value(exportPathOption);
         QString exportPath = QDir::fromNativeSeparators(val);
         g_argData.insert("export_path", exportPath);
@@ -85,6 +88,7 @@ int main(int argc, char *argv[])
         context->setContextProperty("g_argData", &g_argData);
         context->setContextProperty("g_propertyData", &g_propertyData);
         context->setContextProperty("buildQtVersion", QLatin1String(QT_VERSION_STR));
+        context->setContextProperty("qdsMode", isQDSMode);
     } else {
         qWarning("Unable to get access into root QQmlContext!");
     }

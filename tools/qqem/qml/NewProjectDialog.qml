@@ -13,6 +13,7 @@ CustomDialog {
 
     property string defaultPath: StandardPaths.standardLocations(StandardPaths.DesktopLocation)[0]
     property bool clearNodeView: false
+    property bool exportNext: false
 
     title: qsTr("New Effect Project")
     width: 540
@@ -76,5 +77,10 @@ CustomDialog {
     onAccepted: {
         mainView.mainToolbar.setDesignModeInstantly(true);
         effectManager.newProject(pathTextEdit.text, nameTextEdit.text, clearNodeView, true);
+        if (root.exportNext) {
+            // Proceed next with exporting
+            mainWindow.exportAction();
+            root.exportNext = false;
+        }
     }
 }

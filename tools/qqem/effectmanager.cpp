@@ -1070,6 +1070,7 @@ QString EffectManager::detectErrorMessage(const QString &errorMessage)
 {
     QHash<QString, QString> nodeErrors {
         { "'BLUR_HELPER_MAX_LEVEL' : undeclared identifier", "BlurHelper"},
+        { "'iSourceBlur1' : undeclared identifier", "BlurHelper"},
         { "'hash23' : no matching overloaded function found", "NoiseHelper" },
         { "'HASH_BOX_SIZE' : undeclared identifier", "NoiseHelper" },
         { "'pseudo3dNoise' : no matching overloaded function found", "NoiseHelper" }

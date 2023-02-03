@@ -761,8 +761,12 @@ void EffectManager::updateCustomUniforms()
         if (!uniform.useCustomValue && !isDefine && !uniform.description.isEmpty()) {
             // When exporting, add API documentation for properties
             QStringList descriptionLines = uniform.description.split('\n');
-            for (const auto &line: descriptionLines)
-                exportedRootPropertiesString += "    // " + line + '\n';
+            for (const auto &line: std::as_const(descriptionLines)) {
+                if (line.trimmed().isEmpty())
+                    exportedRootPropertiesString += QStringLiteral("    //\n");
+                else
+                    exportedRootPropertiesString += QStringLiteral("    // ") + line + '\n';
+            }
         }
         QString valueString = value.isEmpty() ? QString() : QString(": %1").arg(value);
         QString bindedValueString = bindedValue.isEmpty() ? QString() : QString(": %1").arg(bindedValue);

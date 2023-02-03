@@ -132,7 +132,7 @@ Item {
         id: blurHelper
         anchors.fill: parent
         property int blurMax: g_propertyData.blur_helper_max_level ? g_propertyData.blur_helper_max_level : 64
-        property real blurMultiplier: g_propertyData.blurHelperBlurMultiplier ? g_propertyData.blurHelperBlurMultiplier : 0
+        property real blurMultiplier: g_propertyData.blurMultiplier ? g_propertyData.blurMultiplier : 0
     }
 
     Item {

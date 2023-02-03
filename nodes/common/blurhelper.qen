@@ -17,7 +17,7 @@
                 "description": "This property defines a multiplier for extending the blur radius.\n\nThe value ranges from 0.0 (not multiplied) to inf. By default, the property is set to 0.0. Incresing the multiplier extends the blur radius, but decreases the blur quality. This is more performant option for a bigger blur radius than BLUR_HELPER_MAX_LEVEL as it doesn't increase the amount of texture lookups.\n\nNote: This affects to both blur and shadow effects.",
                 "maxValue": "2",
                 "minValue": "0",
-                "name": "blurHelperBlurMultiplier",
+                "name": "blurMultiplier",
                 "type": "float"
             }
         ],

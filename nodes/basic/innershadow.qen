@@ -34,7 +34,7 @@
         "properties": [
             {
                 "defaultValue": "1",
-                "description": "This property defines how much blur (radius) is applied to the shadow.\n\nThe value ranges from 0.0 (no blur) to 1.0 (full blur). By default, the property is set to 0.0 (no change). The amount of full blur is affected by blurHelperBlurMultiplier.",
+                "description": "This property defines how much blur (radius) is applied to the shadow.\n\nThe value ranges from 0.0 (no blur) to 1.0 (full blur). By default, the property is set to 0.0 (no change). The amount of full blur is affected by BlurHelper blurMultiplier property.",
                 "maxValue": "1",
                 "minValue": "0",
                 "name": "innerShadowBlurAmount",

@@ -100,7 +100,10 @@ void AddNodeModel::loadNodesFromPath(const QString &path) {
                     for (const auto &u : node.jsonUniforms) {
                         NodeDataProperty property;
                         property.m_name = u.name;
-                        property.m_type = UniformModel::typeToProperty(u.type);
+                        if (u.type == UniformModel::Uniform::Type::Define)
+                            property.m_type = QStringLiteral("define");
+                        else
+                            property.m_type = UniformModel::typeToProperty(u.type);
                         QVariant varProperty;
                         varProperty.setValue(property);
                         data.properties << varProperty;

@@ -219,59 +219,81 @@ CustomPopup {
                 }
             }
         }
-        Item {
+        Flickable {
+            id: nodeInfoFlickable
+            readonly property int padding: 10
             width: parent.width - effectsListView.width
             height: parent.height
-            Item {
-                anchors.fill: parent
-                anchors.leftMargin: 10
-                Column {
-                    y: 10
-                    width: parent.width - 20
+            contentHeight: nodeInfo.height
+            clip: true
+            ScrollBar.vertical: ScrollBar {
+                width: 15
+                active: true
+            }
+            Column {
+                id: nodeInfo
+                y: nodeInfoFlickable.padding
+                x: nodeInfoFlickable.padding
+                width: parent.width - nodeInfoFlickable.padding * 3
+                spacing: nodeInfoFlickable.padding
+                Text {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: 10
-                    Text {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: selectedNodeName
-                        font.pixelSize: 16
-                        font.bold: true
-                        color: mainView.foregroundColor2
-                    }
-                    Text {
-                        width: parent.width
-                        text: selectedNodeDescription
-                        font.pixelSize: 14
-                        color: mainView.foregroundColor2
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    }
-                    Text {
-                        width: parent.width
-                        text: "Requires: " + selectedNodeRequires
-                        font.pixelSize: 14
-                        font.bold: true
-                        color: mainView.foregroundColor2
-                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                        visible: selectedNodeRequires !== ""
-                    }
+                    text: selectedNodeName
+                    font.pixelSize: 16
+                    font.bold: true
+                    color: mainView.foregroundColor2
+                }
+                Text {
+                    width: parent.width
+                    text: selectedNodeDescription
+                    font.pixelSize: 14
+                    color: mainView.foregroundColor2
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                }
+                Text {
+                    width: parent.width
+                    text: "Requires: " + selectedNodeRequires
+                    font.pixelSize: 14
+                    font.bold: true
+                    color: mainView.foregroundColor2
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    visible: selectedNodeRequires !== ""
+                }
+                Text {
+                    font.pixelSize: 12
+                    font.bold: true
+                    color: mainView.foregroundColor2
+                    text: "PROPERTIES:"
+                    visible: selectedNodeProperties.length > 0
+                }
+                Rectangle {
+                    id: propertiesArea
+                    width: parent.width
+                    height: childrenRect.height + nodeInfoFlickable.padding
+                    color: mainView.backgroundColor2
+                    border.width: 1
+                    border.color: mainView.foregroundColor1
+                    visible: selectedNodeProperties.length > 0
                     Column {
-                        width: parent.width
-                        visible: selectedNodeProperties.length > 0
-                        Text {
-                            font.pixelSize: 12
-                            font.bold: true
-                            color: mainView.foregroundColor1
-                            text: "PROPERTIES:"
-                        }
+                        width: parent.width - nodeInfoFlickable.padding * 2
+                        x: nodeInfoFlickable.padding
+                        y: nodeInfoFlickable.padding * 0.5
                         Repeater {
                             model: selectedNodeProperties
                             Text {
                                 property var nodeProperty: selectedNodeProperties[index]
+                                width: parent.width
+                                elide: Text.ElideRight
                                 font.pixelSize: 14
                                 color: mainView.foregroundColor2
-                                text: "<b>" + nodeProperty.type + "</b> " + nodeProperty.name;
+                                text: "<b>" + nodeProperty.type + "</b> " + nodeProperty.name
                             }
                         }
                     }
+                }
+                Item {
+                    width: 1
+                    height: nodeInfoFlickable.padding
                 }
             }
         }

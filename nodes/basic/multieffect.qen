@@ -2,6 +2,8 @@
     "QEN": {
         "description": "This node matches to features and API of the Qt Quick MultiEffect element. This makes it easy to build customized MultiEffects.",
         "fragmentCode": [
+            "@requires BlurHelper",
+            "@main",
             "{",
             "    vec4 color = fragColor;",
             "#if (BLUR_ENABLED)",

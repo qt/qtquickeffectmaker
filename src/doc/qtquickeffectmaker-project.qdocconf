@@ -23,6 +23,9 @@ qhp.QtQuickEffectMaker.subprojects                   = manual
 qhp.QtQuickEffectMaker.subprojects.manual.title      = Qt Quick Effect Maker
 qhp.QtQuickEffectMaker.subprojects.manual.indexTitle = All Topics
 qhp.QtQuickEffectMaker.subprojects.manual.type       = manual
+qhp.QtQuickEffectMaker.subprojects.examples.title = Examples
+qhp.QtQuickEffectMaker.subprojects.examples.indexTitle = Qt Quick Effect Maker Examples
+qhp.QtQuickEffectMaker.subprojects.examples.selectors = doc:example
 
 tagfile                       = qtquickeffectmaker.tags
 
@@ -37,3 +40,5 @@ buildversion = "Qt Quick Effect Maker $QT_VERSION"
 
 {navigation.homepage,navigation.hometitle} = "Qt Quick Effect Maker"
 navigation.toctitles = "All Topics"
+
+exampledirs += ../../examples/quickeffectmaker

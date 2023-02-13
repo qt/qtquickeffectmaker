@@ -801,6 +801,10 @@ void EffectManager::updateCustomUniforms()
 QString EffectManager::getQmlEffectString()
 {
     QString s;
+    if (!m_effectHeadings.isEmpty()) {
+        s += m_effectHeadings;
+        s += '\n';
+    }
     s += QString("// Created with Qt Quick Effect Maker (version %1), %2\n\n")
             .arg(qApp->applicationVersion(), QDateTime::currentDateTime().toString());
     s += "import QtQuick\n";
@@ -1499,6 +1503,7 @@ void EffectManager::cleanupProject()
     Q_EMIT exportFlagsChanged();
     // Reset also settings
     setEffectPadding(QRect(0, 0, 0, 0));
+    setEffectHeadings(QString());
     clearImageWatchers();
 }
 
@@ -1618,6 +1623,8 @@ bool EffectManager::loadProject(const QUrl &filename)
         padding.setWidth(settingsObject["paddingRight"].toInt());
         padding.setHeight(settingsObject["paddingBottom"].toInt());
         setEffectPadding(padding);
+        // Effect headings
+        setEffectHeadings(settingsObject["headings"].toString());
     }
 
     if (json.contains("nodes") && json["nodes"].isArray()) {
@@ -1738,6 +1745,8 @@ bool EffectManager::saveProject(const QUrl &filename)
         settingsObject.insert("paddingRight", m_effectPadding.width());
     if (m_effectPadding.height() != 0)
         settingsObject.insert("paddingBottom", m_effectPadding.height());
+    if (!m_effectHeadings.isEmpty())
+        settingsObject.insert("headings", m_effectHeadings);
     if (!settingsObject.isEmpty())
         json.insert("settings", settingsObject);
 
@@ -2346,6 +2355,19 @@ void EffectManager::setEffectPadding(const QRect &newEffectPadding)
         return;
     m_effectPadding = newEffectPadding;
     Q_EMIT effectPaddingChanged();
+}
+
+QString EffectManager::effectHeadings() const
+{
+    return m_effectHeadings;
+}
+
+void EffectManager::setEffectHeadings(const QString &newEffectHeadings)
+{
+    if (m_effectHeadings == newEffectHeadings)
+        return;
+    m_effectHeadings = newEffectHeadings;
+    Q_EMIT effectHeadingsChanged();
 }
 
 void EffectManager::autoIndentCurrentCode(int codeTab, const QString &code)

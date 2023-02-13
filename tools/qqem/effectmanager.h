@@ -60,6 +60,7 @@ class EffectManager : public QObject
     Q_PROPERTY(bool autoPlayEffect READ autoPlayEffect WRITE setAutoPlayEffect NOTIFY autoPlayEffectChanged)
     Q_PROPERTY(AddNodeModel *addNodeModel READ addNodeModel NOTIFY addNodeModelChanged)
     Q_PROPERTY(QRect effectPadding READ effectPadding WRITE setEffectPadding NOTIFY effectPaddingChanged)
+    Q_PROPERTY(QString effectHeadings READ effectHeadings WRITE setEffectHeadings NOTIFY effectHeadingsChanged)
     Q_PROPERTY(ApplicationSettings * settings READ settings NOTIFY settingsChanged)
     QML_ELEMENT
 
@@ -112,6 +113,7 @@ public:
     AddNodeModel *addNodeModel() const;
 
     const QRect &effectPadding() const;
+    QString effectHeadings() const;
 
     ApplicationSettings *settings() const {
         return m_settings;
@@ -148,7 +150,7 @@ public Q_SLOTS:
     void showHideAddNodeGroup(const QString &groupName, bool show);
     void refreshAddNodesList();
     void setEffectPadding(const QRect &newEffectPadding);
-
+    void setEffectHeadings(const QString &newEffectHeadings);
     QString stripFileFromURL(const QString &urlString) const;
     QString addFileToURL(const QString &urlString) const;
     QString getDirectory(const QString &path, bool useFileScheme = true) const;
@@ -183,6 +185,7 @@ signals:
     void addNodeModelChanged();
 
     void effectPaddingChanged();
+    void effectHeadingsChanged();
     void settingsChanged();
 
 private:
@@ -289,6 +292,7 @@ private:
     AddNodeModel *m_addNodeModel = nullptr;
     QStringList m_shaderVaryingVariables;
     QRect m_effectPadding;
+    QString m_effectHeadings;
     QFileSystemWatcher m_fileWatcher;
 };
 

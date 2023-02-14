@@ -786,7 +786,7 @@ void EffectManager::updateCustomUniforms()
             } else {
                 // Custom values are not added into root
                 exportedRootPropertiesString += "    property " + type + " " + propertyName + valueString + '\n';
-                exportedEffectPropertiesString += QStringLiteral("        ") + readOnly + "property " + type + " " + propertyName + ": parent." + uniform.name + '\n';
+                exportedEffectPropertiesString += QStringLiteral("        ") + readOnly + "property alias " + propertyName + ": rootItem." + uniform.name + '\n';
             }
         }
     }
@@ -814,7 +814,7 @@ QString EffectManager::getQmlEffectString()
     s += '\n';
     if (m_shaderFeatures.enabled(ShaderFeatures::Source)) {
         s += "    // This is the main source for the effect\n";
-        s += "    property var source: null\n";
+        s += "    property Item source: null\n";
     }
     if (m_shaderFeatures.enabled(ShaderFeatures::Time) ||
             m_shaderFeatures.enabled(ShaderFeatures::Frame)) {
@@ -839,7 +839,7 @@ QString EffectManager::getQmlEffectString()
             m_shaderFeatures.enabled(ShaderFeatures::Frame)) {
         s += "    FrameAnimation {\n";
         s += "        id: frameAnimation\n";
-        s += "        running: timeRunning\n";
+        s += "        running: rootItem.timeRunning\n";
         s += "    }\n";
         s += '\n';
     }
@@ -893,33 +893,48 @@ QString EffectManager::getQmlEffectString()
 
 QString EffectManager::getQmlComponentString(bool localFiles)
 {
+    auto addProperty = [localFiles](const QString &name, const QString &var, const QString &type, bool blurHelper = false)
+    {
+        if (localFiles) {
+            const QString parent = blurHelper ? "blurHelper." : "rootItem.";
+            return QString("readonly property alias %1: %2%3\n").arg(name, parent, var);
+        } else {
+            const QString parent = blurHelper ? "blurHelper." : QString();
+            return QString("readonly property %1 %2: %3%4\n").arg(type, name, parent, var);
+        }
+    };
+
     QString customImagesString = getQmlImagesString(localFiles);
     QString vertexShaderFilename = "file:///" + m_vertexShaderFilename;
     QString fragmentShaderFilename = "file:///" + m_fragmentShaderFilename;
     QString s;
+    QString l1 = localFiles ? QStringLiteral("    ") : QStringLiteral("");
+    QString l2 = localFiles ? QStringLiteral("        ") : QStringLiteral("    ");
+    QString l3 = localFiles ? QStringLiteral("            ") : QStringLiteral("        ");
+
     if (!localFiles)
         s += "import QtQuick\n";
-    s += "    ShaderEffect {\n";
+    s += l1 + "ShaderEffect {\n";
     if (m_shaderFeatures.enabled(ShaderFeatures::Source))
-        s += "        readonly property var iSource: source\n";
+        s += l2 + addProperty("iSource", "source", "Item");
     if (m_shaderFeatures.enabled(ShaderFeatures::Time))
-        s += "        readonly property real iTime: animatedTime\n";
+        s += l2 + addProperty("iTime", "animatedTime", "real");
     if (m_shaderFeatures.enabled(ShaderFeatures::Frame))
-        s += "        readonly property int iFrame: animatedFrame\n";
+        s += l2 + addProperty("iFrame", "animatedFrame", "int");
     if (m_shaderFeatures.enabled(ShaderFeatures::Resolution)) {
         // Note: Pixel ratio is currently always 1.0
-        s += "        readonly property vector3d iResolution: Qt.vector3d(width, height, 1.0)\n";
+        s += l2 + "readonly property vector3d iResolution: Qt.vector3d(width, height, 1.0)\n";
     }
     if (m_shaderFeatures.enabled(ShaderFeatures::Mouse)) {
-        s += "        readonly property vector4d iMouse: Qt.vector4d(rootItem._effectMouseX, rootItem._effectMouseY,\n";
-        s += "                                                       rootItem._effectMouseZ, rootItem._effectMouseW)\n";
+        s += l2 + "readonly property vector4d iMouse: Qt.vector4d(rootItem._effectMouseX, rootItem._effectMouseY,\n";
+        s += l2 + "                                               rootItem._effectMouseZ, rootItem._effectMouseW)\n";
     }
     if (m_shaderFeatures.enabled(ShaderFeatures::BlurSources)) {
-        s += "        readonly property var iSourceBlur1: blurHelper.blurSrc1\n";
-        s += "        readonly property var iSourceBlur2: blurHelper.blurSrc2\n";
-        s += "        readonly property var iSourceBlur3: blurHelper.blurSrc3\n";
-        s += "        readonly property var iSourceBlur4: blurHelper.blurSrc4\n";
-        s += "        readonly property var iSourceBlur5: blurHelper.blurSrc5\n";
+        s += l2 + addProperty("iSourceBlur1", "blurSrc1", "Item", true);
+        s += l2 + addProperty("iSourceBlur2", "blurSrc2", "Item", true);
+        s += l2 + addProperty("iSourceBlur3", "blurSrc3", "Item", true);
+        s += l2 + addProperty("iSourceBlur4", "blurSrc4", "Item", true);
+        s += l2 + addProperty("iSourceBlur5", "blurSrc5", "Item", true);
     }
     // When used in editor preview component, we need property with value
     // and when in exported component, property with binding to root value.
@@ -952,17 +967,16 @@ QString EffectManager::getQmlComponentString(bool localFiles)
     }
 
     s += '\n';
-    s += "        vertexShader: '" + vertexShaderFilename + "'\n";
-    s += "        fragmentShader: '" + fragmentShaderFilename + "'\n";
-    s += "        width: parent.width\n";
-    s += "        height: parent.height\n";
+    s += l2 + "vertexShader: '" + vertexShaderFilename + "'\n";
+    s += l2 + "fragmentShader: '" + fragmentShaderFilename + "'\n";
+    s += l2 + "anchors.fill: parent\n";
     if (m_shaderFeatures.enabled(ShaderFeatures::GridMesh)) {
         QString gridSize = QString("%1, %2").arg(m_shaderFeatures.m_gridMeshWidth).arg(m_shaderFeatures.m_gridMeshHeight);
-        s += "        mesh: GridMesh {\n";
-        s += QString("            resolution: Qt.size(%1)\n").arg(gridSize);
-        s += "        }\n";
+        s += l2 + "mesh: GridMesh {\n";
+        s += l3 + QString("resolution: Qt.size(%1)\n").arg(gridSize);
+        s += l2 + "}\n";
     }
-    s += "    }\n";
+    s += l1 + "}\n";
     return s;
 }
 

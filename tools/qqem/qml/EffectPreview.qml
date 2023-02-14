@@ -11,6 +11,7 @@ Item {
     property int animatedFrame: previewFrameTimer.currentFrame + playbackTimeComponent.scrubFrame
     property bool timeRunning: previewAnimationRunning
     property rect paddingRect: effectManager.effectPadding
+    property alias source: source
 
     // Scale the content automatically to closest scale step
     // With a small minimum margin

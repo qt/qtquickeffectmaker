@@ -1624,7 +1624,8 @@ bool EffectManager::loadProject(const QUrl &filename)
         padding.setHeight(settingsObject["paddingBottom"].toInt());
         setEffectPadding(padding);
         // Effect headings
-        setEffectHeadings(settingsObject["headings"].toString());
+        if (settingsObject.contains("headings") && settingsObject["headings"].isArray())
+            setEffectHeadings(codeFromJsonArray(settingsObject["headings"].toArray()));
     }
 
     if (json.contains("nodes") && json["nodes"].isArray()) {
@@ -1745,8 +1746,15 @@ bool EffectManager::saveProject(const QUrl &filename)
         settingsObject.insert("paddingRight", m_effectPadding.width());
     if (m_effectPadding.height() != 0)
         settingsObject.insert("paddingBottom", m_effectPadding.height());
-    if (!m_effectHeadings.isEmpty())
-        settingsObject.insert("headings", m_effectHeadings);
+    if (!m_effectHeadings.isEmpty()) {
+        QJsonArray headingsArray;
+        QStringList hLines = m_effectHeadings.split('\n');
+        for (const auto &line: std::as_const(hLines))
+            headingsArray.append(line);
+
+        if (!headingsArray.isEmpty())
+            settingsObject.insert("headings", headingsArray);
+    }
     if (!settingsObject.isEmpty())
         json.insert("settings", settingsObject);
 

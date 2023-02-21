@@ -36,7 +36,7 @@ CustomDialog {
     Column {
         id: mainContent
         width: parent.width
-        spacing: 2
+        spacing: 10
         Text {
             id: paddingLabel
             color: mainView.foregroundColor2
@@ -54,7 +54,7 @@ CustomDialog {
                 font.pixelSize: 14
                 text: "left:"
             }
-            TextField {
+            CustomTextField {
                 id: paddingLeftTextField
                 Layout.row: 0
                 Layout.column: 1
@@ -73,7 +73,7 @@ CustomDialog {
                 font.pixelSize: 14
                 text: "top:"
             }
-            TextField {
+            CustomTextField {
                 id: paddingTopTextField
                 Layout.row: 0
                 Layout.column: 3
@@ -92,7 +92,7 @@ CustomDialog {
                 font.pixelSize: 14
                 text: "right:"
             }
-            TextField {
+            CustomTextField {
                 id: paddingRightTextField
                 Layout.row: 1
                 Layout.column: 1
@@ -111,7 +111,7 @@ CustomDialog {
                 font.pixelSize: 14
                 text: "bottom:"
             }
-            TextField {
+            CustomTextField {
                 id: paddingBottomTextField
                 Layout.row: 1
                 Layout.column: 3

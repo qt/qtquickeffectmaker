@@ -312,6 +312,7 @@ Window {
                     color: mainView.foregroundColor2
                 }
                 Button {
+                    Layout.preferredHeight: 40
                     text: qsTr("Select");
                     onClicked: {
                         codeFontFileDialog.open();

@@ -76,6 +76,7 @@ Rectangle {
         }
         Button {
             id: findPrevButton
+            Layout.preferredHeight: 40
             text: "Previous"
             onClicked: {
                 findPrev();
@@ -90,6 +91,7 @@ Rectangle {
         }
         Button {
             id: findNextButton
+            Layout.preferredHeight: 40
             text: "Next"
             onClicked: {
                 findNext();

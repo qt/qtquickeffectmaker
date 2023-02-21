@@ -22,7 +22,7 @@ CustomDialog {
         }
     }
 
-    TextField {
+    CustomTextField {
         id: nameTextItem
         width: parent.width
         text: effectManager.nodeView.selectedNodeName
@@ -33,6 +33,7 @@ CustomDialog {
     CustomTextEdit {
         id: descriptionTextItem
         anchors.top: nameTextItem.bottom
+        anchors.topMargin: 10
         anchors.bottom: parent.bottom
         width: parent.width
         text: effectManager.nodeView.selectedNodeDescription

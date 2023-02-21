@@ -6,6 +6,8 @@ import QtQuick.Controls
 
 Dialog {
     id: rootItem
+    Material.roundedScale: Material.SmallScale
+
     Overlay.modal: Rectangle {
         color: "#B0000000"
     }

@@ -305,10 +305,11 @@ CustomPopup {
         anchors.leftMargin: 10
         anchors.right: parent.right
         anchors.rightMargin: 10
-        height: cancelButton.height
+        height: 40
         Button {
             id: cancelButton
             anchors.left: parent.left
+            height: parent.height
             text: "Cancel"
             onPressed: {
                 rootItem.close();
@@ -318,6 +319,7 @@ CustomPopup {
             id: refreshButton
             anchors.left: cancelButton.right
             anchors.leftMargin: 10
+            height: parent.height
             text: "Refresh"
             onPressed: {
                 refreshNodesIndicator.show();
@@ -327,6 +329,7 @@ CustomPopup {
         Button {
             id: addButton
             anchors.right: parent.right
+            height: parent.height
             text: "Add"
             enabled: selectedNodeFile != "" && selectedNodeCanBeAdded
             onPressed: {

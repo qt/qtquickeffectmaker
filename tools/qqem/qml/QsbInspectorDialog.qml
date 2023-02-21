@@ -70,6 +70,7 @@ CustomDialog {
             }
         }
         Button {
+            Layout.preferredHeight: 40
             text: qsTr("Browse");
             onClicked: {
                 if (qsbInspectorHelper.shaderData.currentFile !== "") {

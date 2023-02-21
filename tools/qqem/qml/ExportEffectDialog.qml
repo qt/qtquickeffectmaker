@@ -88,7 +88,7 @@ CustomDialog {
             font.pixelSize: 14
             color: mainView.foregroundColor2
         }
-        TextField {
+        CustomTextField {
             id: nameTextEdit
             Layout.columnSpan: 2
             Layout.fillWidth: true
@@ -99,11 +99,12 @@ CustomDialog {
             font.pixelSize: 14
             color: mainView.foregroundColor2
         }
-        TextField {
+        CustomTextField {
             id: pathTextEdit
             Layout.fillWidth: true
         }
         Button {
+            Layout.preferredHeight: 40
             text: qsTr("Browse");
             onClicked: {
                 projectPathDialog.open();

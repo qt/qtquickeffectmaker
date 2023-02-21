@@ -25,6 +25,7 @@ CustomPopup {
     property bool initialEnableMipmap: false // For image properties
     property bool enableMipmap: false // For image properties
     property int selectedNodeId: nodeViewItem.selectedNodeId
+    readonly property real componentSpacing: 10
 
     function insertUniform() {
         let newRow = -1
@@ -54,7 +55,7 @@ CustomPopup {
 
     x: mainWindow.width / 2 - width / 2
     y: mainWindow.height / 2 - height / 2
-    width: 500
+    width: 540
     height: 640
     modal: true
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -129,10 +130,11 @@ CustomPopup {
             font.pixelSize: 14
             anchors.verticalCenter: parent.verticalCenter
         }
-        TextField {
+        CustomTextField {
             id: textItem
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left: nameItem.right
-            anchors.leftMargin: 10
+            anchors.leftMargin: 5
             width: 50
             text: "0"
         }
@@ -153,6 +155,7 @@ CustomPopup {
         Column {
             spacing: 10
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "default"
                 }
@@ -166,6 +169,7 @@ CustomPopup {
                 }
             }
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "min"
                 }
@@ -179,6 +183,7 @@ CustomPopup {
                 }
             }
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "max"
                 }
@@ -208,6 +213,7 @@ CustomPopup {
             }
             spacing: 10
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "default"
                 }
@@ -229,6 +235,7 @@ CustomPopup {
                 }
             }
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "min"
                 }
@@ -250,6 +257,7 @@ CustomPopup {
                 }
             }
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "max"
                 }
@@ -287,6 +295,7 @@ CustomPopup {
             }
             spacing: 10
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "default"
                 }
@@ -316,6 +325,7 @@ CustomPopup {
                 }
             }
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "min"
                 }
@@ -345,6 +355,7 @@ CustomPopup {
                 }
             }
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "max"
                 }
@@ -390,6 +401,7 @@ CustomPopup {
             }
             spacing: 10
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "default"
                 }
@@ -427,6 +439,7 @@ CustomPopup {
                 }
             }
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "min"
                 }
@@ -464,6 +477,7 @@ CustomPopup {
                 }
             }
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "max"
                 }
@@ -520,6 +534,7 @@ CustomPopup {
 
             spacing: 10
             Row {
+                spacing: rootItem.componentSpacing
                 ValueLabelComponent {
                     text: "default"
                 }
@@ -657,7 +672,7 @@ CustomPopup {
     Component {
         id: defineComponent
         Column {
-            TextField {
+            CustomTextField {
                 width: 100
                 text: initialDefaultValue ? initialDefaultValue.toString() : "0"
                 onTextChanged: {
@@ -719,7 +734,7 @@ CustomPopup {
                 Layout.preferredWidth: 100
                 color: mainView.foregroundColor2
             }
-            TextField {
+            CustomTextField {
                 id: uniformNameTextInput
                 RegularExpressionValidator {
                     id: propertyNameValidator
@@ -769,7 +784,7 @@ CustomPopup {
                 Layout.row: 3
                 Layout.column: 1
                 Layout.columnSpan: 2
-                Layout.preferredWidth: 340
+                Layout.preferredWidth: 380
                 Layout.preferredHeight: 160
                 visible: customValueSwitch.checked
                 text: initialCustomValue ? initialCustomValue.toString() : ""
@@ -813,7 +828,7 @@ CustomPopup {
                 Layout.row: 4
                 Layout.column: 1
                 Layout.columnSpan: 2
-                Layout.preferredWidth: 340
+                Layout.preferredWidth: 380
                 Layout.preferredHeight: 200
                 text: initialDescription ? initialDescription.toString() : ""
             }

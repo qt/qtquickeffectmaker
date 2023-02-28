@@ -7,7 +7,7 @@ FpsHelper::FpsHelper()
 {
     setFlag(QQuickItem::ItemHasContents);
 
-    connect(this, &QQuickItem::enabledChanged, [=]() {
+    connect(this, &QQuickItem::enabledChanged, [this]() {
         if (isEnabled()) {
             m_frames = 0;
             m_timer.start();

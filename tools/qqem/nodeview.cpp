@@ -30,7 +30,7 @@ NodeView::NodeView(QQuickItem *parent)
     m_activeArrow.startNodeId = -1;
     m_activeArrow.endNodeId = -1;
 
-    connect(m_nodesModel, &QAbstractItemModel::modelReset, [=]() {
+    connect(m_nodesModel, &QAbstractItemModel::modelReset, [this]() {
         updateCodeSelectorModel();
     });
 }

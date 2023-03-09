@@ -2,12 +2,10 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial
 /*!
     \page qqem-creating-blur-effect.html
-    \previouspage qqem-concept.html
-    \nextpage qqem-troubleshooting.html
 
     \title Creating a blur effect
 
-    To create a blur effect in Qt Quick Effect Maker:
+    To create a blur effect in \QQEM:
 
     \list 1
       \li Add a \uicontrol FastBlur node to the node tree.

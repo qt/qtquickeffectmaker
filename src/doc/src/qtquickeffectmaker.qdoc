@@ -1,13 +1,11 @@
 // Copyright (C) 2023 The Qt Company Ltd.
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial
 /*!
-    \page qqem-index.html
-    \nextpage qqem-installing.html
+    \page qtquickeffectmaker-index.html
+    \title \QQEM
 
-    \title Qt Quick Effect Maker
-
-    Qt Quick Effect Maker is a tool for creating shader effects for
-    Qt Quick with high productivity and performance. You can run Qt Quick Effect Maker
+    \QQEM is a tool for creating shader effects for
+    Qt Quick with high productivity and performance. You can run \QQEM
     as a standalone tool but it is also included in
     \l{https://doc.qt.io/qtdesignstudio/}{Qt Design Studio}.
 
@@ -15,7 +13,7 @@
 
     \section1 Feature overview
 
-    The main features of Qt Quick Effect Maker:
+    The main features of \QQEM:
 
     \list
       \li \b {Live preview}: When you work with effects, you can see most changes instantly in the
@@ -24,17 +22,24 @@
       over 30 nodes, including most of the Qt Graphical Effects.
       \li \b {Code view}: In the code view, you can edit the code of all effect node shaders. The
       code editor features include GLSL syntax highlighting, auto indent, search, and more.
-      \li \b {Combined effects}: For increased performance, Qt Quick Effect Maker combines all the
+      \li \b {Combined effects}: For increased performance, \QQEM combines all the
       effects in one shader.
-      \li \b {JSON file format}: Qt Quick Effect Maker stores project and node files in JSON format,
+      \li \b {JSON file format}: \QQEM stores project and node files in JSON format,
       making it easy to share files for increased productivity.
-      \li \b {Shadertoy compatibility}: Variable naming in Qt Quick Effect Maker is in most cases
+      \li \b {Shadertoy compatibility}: Variable naming in \QQEM is in most cases
       compatible with \l{http://www.shadertoy.com}{Shadertoy}, making it easy to port Shadertoy
-      shaders to Qt Quick Effect Maker and the other way around. Most Shadertoy features and some
+      shaders to \QQEM and the other way around. Most Shadertoy features and some
       extra features, such as vertex shaders, custom textures, and properties, are supported.
-      \li \b {Pure Qt Quick}: Qt Quick Effect Maker is implemented with Qt Quick and
+      \li \b {Pure Qt Quick}: \QQEM is implemented with Qt Quick and
       Qt Quick Controls. The work flow is designed for Qt Quick and Qt RHI.
     \endlist
+
+*/
+
+/*!
+    \group quickeffectmaker-examples
+    \title \QQEM examples
+    \brief Example usage of \QQEM.
 
 */
 
@@ -45,18 +50,19 @@
     \list
         \li Getting started
           \list
-            \li \l {Installing Qt Quick Effect Maker}
+            \li \l {Installing \QQEM}
             \li \l {Creating your first effect}
           \endlist
         \li Concepts
           \list
-            \li \l {About Qt Quick Effect Maker}
+            \li \l {About \QQEM}
           \endlist
         \li How-tos
           \list
-            \li \l {Porting ShaderToy shaders for Qt Quick Effect Maker}
+            \li \l {Porting ShaderToy shaders for \QQEM}
             \li \l {Troubleshooting}
           \endlist
+        \li \l {\QQEM examples}{Examples}
     \endlist
 
 */

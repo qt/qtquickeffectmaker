@@ -33,6 +33,24 @@
       \li \b {Pure Qt Quick}: \QQEM is implemented with Qt Quick and
       Qt Quick Controls. The work flow is designed for Qt Quick and Qt RHI.
     \endlist
+
+    \section1 Getting started
+
+    \list
+      \li \l{Installing \QQEM}
+    \endlist
+
+    \section1 How-to's
+
+    \list
+      \li \l{Creating a blur effect}
+    \endlist
+
+    \section1 Examples
+
+    \list
+      \li \l{Wiggly}: Demonstrates how to use an effect created with \QQEM.
+    \endlist
 */
 
 /*!
@@ -47,21 +65,19 @@
     \title All topics
 
     \list
+        \li \l{\QQEM}
         \li Getting started
           \list
             \li \l {Installing \QQEM}
-            \li \l {Creating your first effect}
-          \endlist
-        \li Concepts
-          \list
-            \li \l {About \QQEM}
           \endlist
         \li How-tos
           \list
-            \li \l {Porting ShaderToy shaders for \QQEM}
-            \li \l {Troubleshooting}
+            \li \l{Creating a blur effect}
           \endlist
-        \li \l {\QQEM examples}{Examples}
+        \li Examples
+          \list
+            \li \l{Wiggly}
+          \endlist
     \endlist
 
 */

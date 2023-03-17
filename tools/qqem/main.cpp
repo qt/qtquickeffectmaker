@@ -6,6 +6,7 @@
 #include <QQmlContext>
 #include <QtCore/QCommandLineParser>
 #include <QDir>
+#include <QIcon>
 #include "effectmanager.h"
 #include "nodeview.h"
 #include "propertyhandler.h"
@@ -37,6 +38,7 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("qt.io");
     app.setApplicationName("Qt Quick Effect Maker");
     app.setApplicationVersion(QLatin1String(APP_VERSION_STR));
+    app.setWindowIcon(QIcon(":/qqem.ico"));
 
     // Setup command line arguments
     QCommandLineParser cmdLineParser;

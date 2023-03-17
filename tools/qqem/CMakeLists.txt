@@ -1,10 +1,9 @@
 # Copyright (C) 2022 The Qt Company Ltd.
 # SPDX-License-Identifier: BSD-3-Clause
 
-qt_get_tool_target_name(target_name qqem)
-qt_internal_add_tool(${target_name}
-    TOOLS_TARGET
-        QQEffectMaker
+set(target_name qqem)
+
+qt_internal_add_app(${target_name}
     SOURCES
         main.cpp
         addnodemodel.cpp addnodemodel.h
@@ -29,7 +28,6 @@ qt_internal_add_tool(${target_name}
         Qt::QuickPrivate
         Qt::ShaderToolsPrivate
 )
-qt_internal_return_unless_building_tools()
 
 # Resources:
 set(qml_resource_files
@@ -121,6 +119,7 @@ set(qml_resource_files
     "qml/fonts/SourceCodePro-Bold.ttf"
     "qml/fonts/SourceCodePro-It.ttf"
     "qml/fonts/SourceCodePro-Regular.ttf"
+    "qqem.ico"
 )
 
 qt_internal_add_resource(${target_name} "qml"
@@ -141,3 +140,30 @@ if (Qt6Quick3DGlslParserPrivate_FOUND)
 else ()
     message(NOTICE "Note: No Quick3DGlslParserPrivate available, building without syntax highlighting")
 endif ()
+
+# Application icon
+if(WIN32)
+    set_target_properties(${target_name} PROPERTIES
+        QT_TARGET_RC_ICONS "${CMAKE_CURRENT_SOURCE_DIR}/qqem.ico"
+    )
+endif()
+
+if(APPLE)
+    set_target_properties(${target_name} PROPERTIES
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info_mac.plist"
+        MACOSX_BUNDLE TRUE
+        MACOSX_BUNDLE_ICON_FILE "qqem.icns"
+        OUTPUT_NAME "qqem"
+    )
+    set_source_files_properties(qqem.icns PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+    )
+    target_sources(${target_name} PRIVATE
+        qqem.icns
+    )
+    # special case end
+    # Set values to be replaced in the custom Info_mac.plist.
+    set(ICON "qqem.icns")
+    set(EXECUTABLE "qqem")
+    # special case end
+endif()

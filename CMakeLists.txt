@@ -16,7 +16,7 @@ find_package(Qt6 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS BuildInternals Co
 find_package(Qt6 ${PROJECT_VERSION} QUIET CONFIG OPTIONAL_COMPONENTS Gui Quick ShaderTools)
 
 # Quick3DGlslParserPrivate is optional
-find_package(Qt6 ${PROJECT_VERSION} COMPONENTS Quick3DGlslParserPrivate)
+find_package(Qt6 ${PROJECT_VERSION} OPTIONAL_COMPONENTS Quick3DGlslParserPrivate)
 set_package_properties(Qt6Quick3DGlslParserPrivate PROPERTIES
     TYPE OPTIONAL
     PURPOSE "- Enables Syntax Highlighting"

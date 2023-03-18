@@ -206,6 +206,7 @@ void SyntaxHighlighter::highlightBlock(const QString &text)
 // Dummy version without glslparser dependency
 void SyntaxHighlighter::highlightBlock(const QString &text)
 {
+    Q_UNUSED(text)
 }
 
 #endif

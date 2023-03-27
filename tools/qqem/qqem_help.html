@@ -42,9 +42,10 @@ Tags are special commands which are looked for from the shader sources. Format o
 </table>
 <br>
 <h2>Porting shadertoy shaders</h2>
-Shadertoy (https://www.shadertoy.com) is very popular website for creating and sharing shader effects. Here are few tips for porting those shaders into Qt Quick Effect Maker:
+Shadertoy (<a href="https://shadertoy.com">https://shadertoy.com</a>) is very popular website for creating and sharing shader effects. Here are few tips for porting those shaders into Qt Quick Effect Maker:
 <ul>
-<li>Shadertoy shaders contain main entry as something like "void mainImage( ... ) { ... }". Replace that with the main tag "//main" and either remove the '{' and '}' or keep them in separate lines to have the shader code in its own scope.</li>
+<li>Create a new Custom (empty) node for the Shadertoy effect.</li>
+<li>Shadertoy shaders contain main entry as something like "void mainImage( ... ) { ... }". Replace that with the main tag "@main" and either remove the '{' and '}' or keep them in separate lines to have the shader code in its own scope.</li>
 <li>Not all features of Shadertoy are supported. Effects with multipass ("Buffer" tabs) can't be done with effect maker, you must build them separately and bind the output of the buffer ShaderEffect to the source of the next ShaderEffect. Also audio, cubemaps and 3D textures are not supported.</li>
 <li>Shadertoy only supports fragment shaders and built-in textures. To improve the performance of the effect with QQEM you can move some calculations into vertex shader and use custom images to simplify fragment shader.</li>
 <li>Coordinate system between Qt and Shadereffect differs so that Qt has origin (0,0) in top-left corner while Shadertoy and OpenGL use bottom-left corner. If this is important for the effect, consider flipping the y-coordinate in a suitable way. For example to flip fragCoord in Main node switch to: "fragCoord = vec2(qt_Vertex.x, iResolution.y - qt_Vertex.y)". Similarly you may need to adjust texCoord and iMouse.</li>

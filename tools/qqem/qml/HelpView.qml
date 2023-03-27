@@ -28,6 +28,12 @@ Item {
             selectByMouse: true
             text: effectManager.getHelpTextString();
             font.pixelSize: 14
+            onLinkActivated: (link)=> Qt.openUrlExternally(link)
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+            }
         }
     }
 }

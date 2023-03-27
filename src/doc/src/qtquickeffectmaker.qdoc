@@ -44,6 +44,7 @@
 
     \list
       \li \l{Creating a blur effect}
+      \li \l{Porting Shadertoy effects to \QQEM}
     \endlist
 
     \section1 Examples
@@ -73,6 +74,7 @@
         \li How-tos
           \list
             \li \l{Creating a blur effect}
+            \li \l{Porting Shadertoy effects to \QQEM}
           \endlist
         \li Examples
           \list

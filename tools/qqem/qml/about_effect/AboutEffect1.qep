@@ -1,5 +1,6 @@
 {
     "QEP": {
+        "QQEM": "0.43",
         "connections": [
             {
                 "fromId": 0,
@@ -26,7 +27,7 @@
                 "fragmentCode": [
                     "void main() {",
                     "    fragColor = vec4(0.0);",
-                    "    //nodes",
+                    "    @nodes",
                     "    fragColor = fragColor * qt_Opacity;",
                     "}"
                 ],
@@ -38,7 +39,7 @@
                     "    texCoord = qt_MultiTexCoord0;",
                     "    fragCoord = qt_Vertex.xy;",
                     "    vec2 vertCoord = qt_Vertex.xy;",
-                    "    //nodes",
+                    "    @nodes",
                     "    gl_Position = qt_Matrix * vec4(vertCoord, 0.0, 1.0);",
                     "}"
                 ],
@@ -55,7 +56,7 @@
             {
                 "description": "This is an empty node for creating custom effects.",
                 "fragmentCode": [
-                    "//main",
+                    "@main",
                     "{",
                     "    vec2 uv = 2.0 * texCoord - vec2(1.0);",
                     "    const vec2 uv0 = uv;",
@@ -95,7 +96,7 @@
                     "    const float s = sin(a);",
                     "    return mat2(c, -s, s, c);",
                     "}",
-                    "//main"
+                    "@main"
                 ],
                 "name": "MathHelper",
                 "nodeId": 3,
@@ -106,7 +107,7 @@
             {
                 "description": "Applies vignette effect to the source, so adds darkening / color towards the corners.",
                 "fragmentCode": [
-                    "//main",
+                    "@main",
                     "{",
                     "    float vigDist = distance(texCoord, vec2(0.5));",
                     "    vec4 vigColor = vec4(vignetteColor.rgb, smoothstep(vignetteInnerRadius, vignetteOuterRadius, vigDist));",
@@ -147,6 +148,13 @@
                 "y": 465.3999938964844
             }
         ],
+        "settings": {
+            "headings": [
+                "// Copyright (C) 2022 The Qt Company Ltd.",
+                "// SPDX-License-Identifier: BSD-3-Clause",
+                ""
+            ]
+        },
         "version": 1
     }
 }

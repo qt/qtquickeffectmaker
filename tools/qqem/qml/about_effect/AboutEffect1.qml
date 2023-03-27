@@ -1,7 +1,7 @@
 // Copyright (C) 2022 The Qt Company Ltd.
 // SPDX-License-Identifier: BSD-3-Clause
 
-// Created with Qt Quick Effect Maker (version 0.35), Tue Sep 27 13:20:47 2022
+// Created with Qt Quick Effect Maker (version 0.43), Mon Mar 27 11:23:23 2023
 
 import QtQuick
 
@@ -22,18 +22,17 @@ Item {
 
     FrameAnimation {
         id: frameAnimation
-        running: timeRunning
+        running: rootItem.timeRunning
     }
 
     ShaderEffect {
-        readonly property real iTime: animatedTime
-        readonly property color vignetteColor: parent.vignetteColor
-        readonly property real vignetteInnerRadius: parent.vignetteInnerRadius
-        readonly property real vignetteOuterRadius: parent.vignetteOuterRadius
+        readonly property alias iTime: rootItem.animatedTime
+        readonly property alias vignetteColor: rootItem.vignetteColor
+        readonly property alias vignetteInnerRadius: rootItem.vignetteInnerRadius
+        readonly property alias vignetteOuterRadius: rootItem.vignetteOuterRadius
 
         vertexShader: 'abouteffect1.vert.qsb'
         fragmentShader: 'abouteffect1.frag.qsb'
-        width: parent.width
-        height: parent.height
+        anchors.fill: parent
     }
 }

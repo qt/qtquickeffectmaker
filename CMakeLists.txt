@@ -14,6 +14,7 @@ project(QQEffectMaker
 
 find_package(Qt6 ${PROJECT_VERSION} CONFIG REQUIRED COMPONENTS BuildInternals Core)
 find_package(Qt6 ${PROJECT_VERSION} QUIET CONFIG OPTIONAL_COMPONENTS Gui Quick ShaderTools)
+qt_internal_project_setup()
 
 # Quick3DGlslParserPrivate is optional
 find_package(Qt6 ${PROJECT_VERSION} OPTIONAL_COMPONENTS Quick3DGlslParserPrivate)

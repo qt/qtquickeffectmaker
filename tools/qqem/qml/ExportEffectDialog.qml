@@ -128,6 +128,7 @@ CustomDialog {
             id: qsbVersionSelector
             anchors.verticalCenter: parent.verticalCenter
             width: 200
+            currentIndex: 1
             model: ["Latest", "Qt 6.5 compatibility", "Qt 6.4 compatibility"]
         }
     }

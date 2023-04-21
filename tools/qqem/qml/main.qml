@@ -504,6 +504,7 @@ ApplicationWindow {
         propertyEditDialog.initialUseCustomValue = false;
         propertyEditDialog.initialCustomValue = "";
         propertyEditDialog.initialEnableMipmap = false;
+        propertyEditDialog.initialExportImage = true;
         propertyEditDialog.open();
     }
 

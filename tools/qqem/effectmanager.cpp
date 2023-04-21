@@ -703,6 +703,8 @@ QString EffectManager::getQmlImagesString(bool localFiles)
         if (!m_nodeView->m_activeNodesIds.contains(uniform.nodeId))
             continue;
         if (uniform.type == UniformModel::Uniform::Type::Sampler) {
+            if (localFiles && !uniform.exportImage)
+                continue;
             QString imagePath = uniform.value.toString();
             if (imagePath.isEmpty())
                 continue;
@@ -743,6 +745,7 @@ void EffectManager::updateCustomUniforms()
         if (!uniform.exportProperty)
             continue;
         const bool isDefine = uniform.type == UniformModel::Uniform::Type::Define;
+        const bool isImage = uniform.type == UniformModel::Uniform::Type::Sampler;
         QString type = m_uniformModel->typeToProperty(uniform.type);
         QString value = m_uniformModel->valueAsString(uniform);
         QString bindedValue = m_uniformModel->valueAsBinding(uniform);
@@ -781,6 +784,10 @@ void EffectManager::updateCustomUniforms()
                 exportedEffectPropertiesString += QStringLiteral("        ") + readOnly + "property " + type + " " + propertyName + bindedValueString + '\n';
             } else {
                 // Custom values are not added into root
+                if (isImage && !uniform.exportImage) {
+                    // When exporting image is disabled, remove value from root property
+                    valueString.clear();
+                }
                 exportedRootPropertiesString += "    property " + type + " " + propertyName + valueString + '\n';
                 exportedEffectPropertiesString += QStringLiteral("        ") + readOnly + "property alias " + propertyName + ": rootItem." + uniform.name + '\n';
             }
@@ -1396,6 +1403,8 @@ bool EffectManager::createNodeFromJson(const QJsonObject &rootJson, NodesModel::
                     defaultValue = relativeToAbsolutePath(defaultValue, nodePath);
                 if (propertyObject.contains("enableMipmap"))
                     u.enableMipmap = getBoolValue(propertyObject["enableMipmap"], false);
+                if (propertyObject.contains("exportImage"))
+                    u.exportImage = getBoolValue(propertyObject["exportImage"], true);
                 // Update the mipmap property
                 QString mipmapProperty = mipmapPropertyName(u.name);
                 g_propertyData[mipmapProperty] = u.enableMipmap;
@@ -1908,6 +1917,8 @@ QJsonObject EffectManager::nodeToJson(const NodesModel::Node &node, bool simplif
             defaultValue = absoluteToRelativePath(defaultValue, nodePath);
             if (uniform.enableMipmap)
                 uniformObject.insert("enableMipmap", uniform.enableMipmap);
+            if (!uniform.exportImage)
+                uniformObject.insert("exportImage", false);
         }
         uniformObject.insert("defaultValue", defaultValue);
         if (!uniform.description.isEmpty())
@@ -2109,7 +2120,9 @@ bool EffectManager::exportEffect(const QString &dirPath, const QString &filename
     // Copy images
     if (exportFlags & Images) {
         for (auto &uniform : m_uniformTable) {
-            if (uniform.type == UniformModel::Uniform::Type::Sampler && !uniform.value.toString().isEmpty()) {
+            if (uniform.type == UniformModel::Uniform::Type::Sampler &&
+                !uniform.value.toString().isEmpty() &&
+                uniform.exportImage) {
                 QString imagePath = uniform.value.toString();
                 QFileInfo fi(imagePath);
                 QString imageFilename = fi.fileName();

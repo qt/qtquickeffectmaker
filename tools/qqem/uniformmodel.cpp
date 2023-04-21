@@ -141,6 +141,8 @@ QVariant UniformModel::data(const QModelIndex &index, int role) const
         return QVariant::fromValue(uniform.canMoveDown);
     } else if (role == EnableMipmap) {
         return QVariant::fromValue(uniform.enableMipmap);
+    } else if (role == ExportImage) {
+        return QVariant::fromValue(uniform.exportImage);
     }
 
     return QVariant();
@@ -164,6 +166,7 @@ QHash<int, QByteArray> UniformModel::roleNames() const
     roles[CanMoveUp] = "canMoveUp";
     roles[CanMoveDown] = "canMoveDown";
     roles[EnableMipmap] = "enableMipmap";
+    roles[ExportImage] = "exportImage";
     return roles;
 }
 
@@ -255,6 +258,8 @@ bool UniformModel::setData(const QModelIndex &index, const QVariant &value, int 
         uniform.canMoveDown = value.toBool();
     } else if (role == EnableMipmap) {
         uniform.enableMipmap = value.toBool();
+    } else if (role == ExportImage) {
+        uniform.exportImage = value.toBool();
     }
 
     if (role == Value) {
@@ -316,7 +321,7 @@ QString UniformModel::getImageElementName(const Uniform &uniform)
 bool UniformModel::updateRow(int nodeId, int rowIndex, int type, const QString &id,
                              const QVariant &defaultValue, const QString &description, const QString &customValue,
                              bool useCustomValue, const QVariant &minValue, const QVariant &maxValue,
-                             bool enableMipmap)
+                             bool enableMipmap, bool exportImage)
 {
     if (m_uniformTable == nullptr)
         return false;
@@ -351,6 +356,7 @@ bool UniformModel::updateRow(int nodeId, int rowIndex, int type, const QString &
     uniform.customValue = customValue;
     uniform.useCustomValue = useCustomValue;
     uniform.enableMipmap = enableMipmap;
+    uniform.exportImage = exportImage;
     switch (uniform.type) {
     case Uniform::Type::Bool:
         uniform.defaultValue = defaultValue;

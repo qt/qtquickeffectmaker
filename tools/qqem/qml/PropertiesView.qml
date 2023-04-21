@@ -259,6 +259,7 @@ Item {
                                 propertyEditDialog.initialCustomValue = model.customValue;
                                 propertyEditDialog.initialUseCustomValue = model.useCustomValue;
                                 propertyEditDialog.initialEnableMipmap = model.enableMipmap;
+                                propertyEditDialog.initialExportImage = model.exportImage;
                                 propertyEditDialog.open();
                             }
                         }

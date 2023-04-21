@@ -24,6 +24,8 @@ CustomPopup {
     property bool initialUseCustomValue: false
     property bool initialEnableMipmap: false // For image properties
     property bool enableMipmap: false // For image properties
+    property bool initialExportImage: true
+    property bool exportImage: true
     property int selectedNodeId: nodeViewItem.selectedNodeId
     readonly property real componentSpacing: 10
 
@@ -31,7 +33,8 @@ CustomPopup {
         let newRow = -1
         if (effectManager.uniformModel.updateRow(selectedNodeId, newRow, typeComboBox.currentIndex, uniformNameTextInput.text,
                                                  rootItem.defaultValue, descriptionTextArea.text, customValueTextArea.text,
-                                                 customValueSwitch.checked, rootItem.minValue, rootItem.maxValue, rootItem.enableMipmap)) {
+                                                 customValueSwitch.checked, rootItem.minValue, rootItem.maxValue, rootItem.enableMipmap,
+                                                 rootItem.exportImage)) {
             rootItem.close();
         }
     }
@@ -39,7 +42,8 @@ CustomPopup {
     function updateUniform() {
         if (effectManager.uniformModel.updateRow(selectedNodeId, rootItem.propertyIndex, typeComboBox.currentIndex, uniformNameTextInput.text,
                                                  rootItem.defaultValue, descriptionTextArea.text, customValueTextArea.text,
-                                                 customValueSwitch.checked, rootItem.minValue, rootItem.maxValue, rootItem.enableMipmap)) {
+                                                 customValueSwitch.checked, rootItem.minValue, rootItem.maxValue, rootItem.enableMipmap,
+                                                 rootItem.exportImage)) {
             rootItem.close();
         }
     }
@@ -64,10 +68,11 @@ CustomPopup {
         if (visible) {
             typeComboBox.currentIndex = initialType;
             rootItem.enableMipmap = rootItem.initialEnableMipmap;
+            rootItem.exportImage = rootItem.initialExportImage;
             if (initialType == 7) {
                 // When editing an image property, update the correct image
                 // preview & mipmap status
-                valueItemLoader.item.loadSource(initialDefaultValue, initialEnableMipmap);
+                valueItemLoader.item.loadSource(initialDefaultValue, initialEnableMipmap, initialExportImage);
             }
             uniformNameTextInput.text = initialName;
             descriptionTextArea.text = initialDescription;
@@ -599,13 +604,15 @@ CustomPopup {
     Component {
         id: imageComponent
         Column {
-            function loadSource(sourceImage, mipmapEnabled) {
+            function loadSource(sourceImage, mipmapEnabled, exportImage) {
                 previewImage.source = sourceImage ? sourceImage : "";
                 mipmapCheckBox.checked = mipmapEnabled;
+                exportImageCheckBox.checked = exportImage;
             }
+            spacing: -10
             Rectangle {
                 width: 180
-                height: 120
+                height: 90
                 border.width: 1
                 color: mainView.backgroundColor2
                 border.color: mainView.foregroundColor1
@@ -653,6 +660,14 @@ CustomPopup {
                         var mipmapPropertyName = effectManager.mipmapPropertyName(initialName);
                         g_propertyData[mipmapPropertyName] = checked;
                     }
+                }
+            }
+            CheckBox {
+                id: exportImageCheckBox
+                text: "Create QML Image element"
+                checked: rootItem.initialExportImage
+                onToggled: {
+                    rootItem.exportImage = checked;
                 }
             }
             FileDialog {

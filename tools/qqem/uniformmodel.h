@@ -45,6 +45,7 @@ public:
         bool canMoveUp = false;
         bool canMoveDown = false;
         bool enableMipmap = false;
+        bool exportImage = true;
         // The effect node which owns this uniform
         int nodeId = -1;
         bool operator==(const Uniform& rhs) const noexcept
@@ -70,7 +71,8 @@ public:
         ExportProperty,
         CanMoveUp,
         CanMoveDown,
-        EnableMipmap
+        EnableMipmap,
+        ExportImage
     };
 
     explicit UniformModel(QObject *parent = nullptr);
@@ -94,7 +96,7 @@ public:
     Q_INVOKABLE bool updateRow(int nodeId, int rowIndex, int type, const QString &id,
                                const QVariant &defaultValue, const QString &description, const QString &customValue,
                                bool useCustomValue, const QVariant &minValue, const QVariant &maxValue,
-                               bool enableMipmap);
+                               bool enableMipmap, bool exportImage);
     Q_INVOKABLE void removeRow(int rowIndex, int rows = 1);
     Q_INVOKABLE bool resetValue(int rowIndex);
     Q_INVOKABLE bool setImage(int rowIndex, const QVariant &value);

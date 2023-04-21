@@ -18,7 +18,7 @@
             "        c += 1.0 / length(vec2(p.x / (sin(ip.x + t) / inten), p.y / (cos(ip.y + t) / inten)));",
             "    }",
             "    c /= float(WATER_ITERATIONS);",
-            "    c = 1.2 - (c * c);",
+            "    c = max(0.0, 1.2 - (c * c));",
             "    vec3 water = waterColor.rgb + vec3(pow(c, 4.0)) * (2.0 * waterWavesColor.rgb - 1.0);",
             "    fragColor = mix(fragColor, vec4(water, 1.0) * fragColor.a, waterColor.a);",
             "}"

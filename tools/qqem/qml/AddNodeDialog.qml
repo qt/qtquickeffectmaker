@@ -113,6 +113,7 @@ CustomPopup {
             height: parent.height
             model: effectManager.addNodeModel
             clip: true
+            cacheBuffer: 10000
             ScrollBar.vertical: ScrollBar {
                 id: scrollBar
                 policy: ScrollBar.AlwaysOn

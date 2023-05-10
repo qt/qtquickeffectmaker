@@ -12,7 +12,7 @@
 #include "uniformmodel.h"
 #include "nodeview.h"
 #include "shaderfeatures.h"
-#include <QtShaderTools/private/qshaderbaker_p.h>
+#include <rhi/qshaderbaker.h>
 #include <QtQuick/private/qquicktextedit_p_p.h>
 #include "addnodemodel.h"
 #include "applicationsettings.h"

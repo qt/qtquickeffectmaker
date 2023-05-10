@@ -6,7 +6,7 @@
 
 #include <QObject>
 #include <QVariantList>
-#include <QtGui/private/qshader_p_p.h>
+#include <QtGui/private/qshader_p.h>
 
 // Model for common qsb information
 struct QsbShaderData {

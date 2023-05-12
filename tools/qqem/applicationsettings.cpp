@@ -6,6 +6,7 @@
 
 #include <QImageReader>
 #include <QFileInfo>
+#include <QLibraryInfo>
 
 const QStringList defaultSources = { "defaultnodes/images/qt_logo_green_rgb.png",
                                      "defaultnodes/images/quit_logo.png",
@@ -164,8 +165,8 @@ ApplicationSettings::ApplicationSettings(QObject *parent)
     : QObject{parent}
 {
     // Get canonical path into default nodes
-    QString resourcesPath = QString(QCoreApplication::applicationDirPath() +
-                                    QStringLiteral("/../qml/QtQuickEffectMaker"));
+    QString resourcesPath = QLibraryInfo::path(QLibraryInfo::QmlImportsPath) +
+                            QStringLiteral("/QtQuickEffectMaker");
     QFileInfo fi(resourcesPath);
     resourcesPath = fi.canonicalFilePath();
     m_settings.setValue(KEY_DEFAULT_RESOURCE_PATH, resourcesPath);

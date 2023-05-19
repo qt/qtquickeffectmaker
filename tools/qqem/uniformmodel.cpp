@@ -432,11 +432,8 @@ bool UniformModel::resetValue(int rowIndex)
 // Updates the image data at rowIndex
 bool UniformModel::setImage(int rowIndex, const QVariant &value)
 {
-    beginResetModel();
     auto &uniform = (*m_uniformTable)[rowIndex];
     uniform.value = value.toString();
-
-    endResetModel();
 
     g_propertyData.insert(uniform.name, value);
 
@@ -936,7 +933,6 @@ void UniformModel::updateCanMoveStatus() {
     if (m_uniformTable->isEmpty())
             return;
     QList<int> usedIds;
-    beginResetModel();
     for (int i = 0; i < m_uniformTable->size() ; i++) {
         auto &uniform = (*m_uniformTable)[i];
         if (usedIds.contains(uniform.nodeId)) {
@@ -956,6 +952,8 @@ void UniformModel::updateCanMoveStatus() {
             usedIds << uniform.nodeId;
         }
     }
-    endResetModel();
+    int lastRowIndex = m_uniformTable->size();
+    emit dataChanged(QAbstractItemModel::createIndex(0, 0),
+                     QAbstractItemModel::createIndex(lastRowIndex, 0));
 }
 

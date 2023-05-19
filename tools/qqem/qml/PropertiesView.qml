@@ -344,7 +344,8 @@ Item {
                                 if (model.type === 7)
                                     return imageControlsComponent
                                 if (model.type === 8)
-                                    return defineControlsComponent                            }
+                                    return defineControlsComponent
+                            }
                         }
 
                         // Component with a text field and a slider

@@ -17,13 +17,14 @@ Item {
 
     Image {
         id: iconImage
+        property real effectiveOpacity: 1.0
         anchors.centerIn: parent
         height: parent.height * 0.8
         width: parent.width * 0.8
         fillMode: Image.PreserveAspectFit
         source: (toggleButton && toggled) ? rootItem.toggledIcon : rootItem.icon
         mipmap: true
-        opacity: rootItem.enabled ? 1.0 : 0.3
+        opacity: rootItem.enabled ? effectiveOpacity : 0.3
     }
     MouseArea {
         id: iconButtomMouseArea
@@ -39,14 +40,14 @@ Item {
         id: clickAnimation
         NumberAnimation {
             target: iconImage
-            property: "opacity"
+            property: "effectiveOpacity"
             to: 0.5
             easing.type: Easing.InOutQuad
             duration: 200
         }
         NumberAnimation {
             target: iconImage
-            property: "opacity"
+            property: "effectiveOpacity"
             to: 1.0
             easing.type: Easing.InOutQuad
             duration: 200

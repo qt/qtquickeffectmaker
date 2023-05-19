@@ -148,6 +148,7 @@ Item {
             flickableDirection: Flickable.VerticalFlick
             model: effectManager.uniformModel
             clip: true
+            cacheBuffer: 10000
             ScrollBar.vertical: ScrollBar {
                 policy: ScrollBar.AlwaysOn
             }

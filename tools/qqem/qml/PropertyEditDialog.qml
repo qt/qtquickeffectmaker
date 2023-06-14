@@ -723,6 +723,7 @@ CustomPopup {
             ComboBox {
                 id: typeComboBox
                 currentIndex: initialType
+                Layout.preferredHeight: 40
                 Layout.row: 0
                 Layout.column: 1
                 model: [

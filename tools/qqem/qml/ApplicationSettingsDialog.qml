@@ -320,8 +320,8 @@ Window {
                 }
                 ComboBox {
                     id: fontSizeSelector
-                    width: 70
-                    implicitWidth: 70
+                    Layout.preferredWidth: 80
+                    Layout.preferredHeight: 40
                     model: [6, 7, 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48, 72]
                     onActivated: {
                         effectManager.settings.setCodeFontSize(currentValue);
@@ -348,25 +348,13 @@ Window {
         }
     }
 
-    Item {
+    DialogButtonBox {
         id: footer
         anchors.bottom: parent.bottom
         width: parent.width
-        height: buttonRow.height
-        Row {
-            id: buttonRow
-            anchors.right: parent.right
-            anchors.rightMargin: 5
-            height: closeButton.height
-            Button {
-                id: closeButton
-                text: qsTr("Close")
-                flat: true
-                highlighted: true
-                onClicked: {
-                    rootItem.close();
-                }
-            }
+        standardButtons: DialogButtonBox.Close
+        onRejected: {
+            rootItem.close();
         }
     }
 }

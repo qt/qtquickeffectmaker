@@ -82,8 +82,10 @@ CustomDialog {
         }
         ComboBox {
             Layout.preferredWidth: 160
+            Layout.preferredHeight: 40
             textRole: "name"
             valueRole: "sourceIndex"
+            enabled: count > 0
             model: qsbInspectorHelper.sourceSelectorModel
             onCurrentValueChanged: {
                 qsbInspectorHelper.currentSourceIndex = currentValue;

@@ -135,7 +135,7 @@ public Q_SLOTS:
     bool addEffectNode(const QString &filename, int startNodeId = -1, int endNodeId = -1);
     bool deleteEffectNodes(QList<int> nodeIds);
     bool loadProject(const QUrl &filename);
-    bool saveProject(const QUrl &filename = QString());
+    bool saveProject(const QUrl &filename = {});
     bool newProject(const QString &filepath, const QString &filename, bool clearNodeView, bool createProjectDir = false);
     void closeProject();
     bool exportEffect(const QString &dirPath, const QString &filename, int exportFlags, int qsbVersionIndex);

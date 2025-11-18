@@ -1052,7 +1052,7 @@ void EffectManager::initialize()
             QFileInfo fi(fullFilePath);
             projectOpened = newProject(fi.path(), fi.baseName(), true, false);
         } else {
-            projectOpened = loadProject(fullFilePath);
+            projectOpened = loadProject(QUrl{fullFilePath});
         }
     }
 
@@ -2019,7 +2019,7 @@ bool EffectManager::newProject(const QString &filepath, const QString &filename,
     if (!dirPath.startsWith("file:"))
         projectFilename += "file:///";
     projectFilename += dirPath + "/" + filename + ".qep";
-    m_projectFilename = projectFilename;
+    m_projectFilename = QUrl{projectFilename};
     Q_EMIT projectFilenameChanged();
     Q_EMIT hasProjectFilenameChanged();
 

@@ -153,7 +153,7 @@ if(APPLE)
         MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Info_mac.plist"
         MACOSX_BUNDLE TRUE
         MACOSX_BUNDLE_ICON_FILE "qqem.icns"
-        OUTPUT_NAME "qqem"
+        OUTPUT_NAME "Qt Quick Effect Maker"
     )
     set_source_files_properties(qqem.icns PROPERTIES
         MACOSX_PACKAGE_LOCATION Resources

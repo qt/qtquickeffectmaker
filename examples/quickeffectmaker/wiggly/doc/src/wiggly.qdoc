@@ -15,6 +15,7 @@
     as well as applying the electric cloud effect.
 
     \image wiggly-example.png
+           {Wiggly text reading HELLO WORLD with rainbow gradient and wave effect}
 
     \include examples-run.qdocinc
 
@@ -32,11 +33,12 @@
     that hides this element as the effect will replace its content. If the item is
     visible, it looks like this without the wiggly effect:
 
-    \image wiggly-sourceitem.png
+    \image wiggly-sourceitem.png {Label displaying the text WIGGLY}
 
     Next, create the settings toolbar used for controlling the effect.
 
     \image wiggly-settings.png
+           {Settings toolbar with text field, two sliders, and toggle switch}
 
     \snippet wiggly/main.qml settings
 
@@ -73,6 +75,7 @@
     something like this:
 
     \image wiggly-qqem.png
+           {Qt Quick Effect Maker with node view on left and shader code on right}
 
     On the left side, you can see the \uicontrol {Node view} with different nodes of this effect.
     The top-right view is \uicontrol {Property view}, with properties (API) of the effect.
@@ -147,5 +150,6 @@
     to the beginning of the node graph:
 
     \image wiggly-ledscreen.png
+           {Wiggly text with LED screen effect showing colorful dot pattern}
 
 */

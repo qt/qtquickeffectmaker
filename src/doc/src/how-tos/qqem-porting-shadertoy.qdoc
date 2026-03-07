@@ -30,6 +30,7 @@
       \li In the node editor, select \uicontrol {Add node} and then, under \uicontrol Common,
       select \uicontrol Custom. This creates an empty node.
       \image add-custom-node.webp
+             {Add Effect Node dialog with Custom selected under Common category}
       \li In Shadertoy, copy all the code from the \uicontrol Image tab.
       \li In \QQEM, double-click the \uicontrol Custom node in the node editor. This opens the
       code editor.
@@ -48,6 +49,7 @@
         \list 1
           \li Go to the \uicontrol Vert tab.
             \image vert-tab.png
+                   {Code editor with VERT tab selected showing vertex shader}
           \li In the drop-down menu, select \uicontrol Main.
           \li Find the \c fragCoord line, it should look something like:
             \badcode

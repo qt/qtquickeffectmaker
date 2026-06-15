@@ -166,7 +166,8 @@ ApplicationSettings::ApplicationSettings(QObject *parent)
     : QObject{parent}
 {
     // Get canonical path into default nodes
-    QString resourcesPath = QLibraryInfo::path(QLibraryInfo::QmlImportsPath) +
+    // ### note: there may be more than one path
+    QString resourcesPath = QLibraryInfo::paths(QLibraryInfo::QmlImportsPath).value(0) +
                             QStringLiteral("/QtQuickEffectMaker");
     QFileInfo fi(resourcesPath);
     resourcesPath = fi.canonicalFilePath();
